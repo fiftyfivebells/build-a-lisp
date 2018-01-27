@@ -95,15 +95,15 @@ lval eval_op(lval x, char* op, lval y) {
         if (x.type == LVAL_LONG) { double x_num_double = x.num_long; x.num_double = x_num_double; }
         if (y.type == LVAL_LONG) { double y_num_double = y.num_long; y.num_double = y_num_double; }
 
-        if (strcmp(op, "+") == 0) { return lval_num_double(x.num_long + y.num_long); }
-        if (strcmp(op, "-") == 0) { return lval_num_double(x.num_long - y.num_long); }
-        if (strcmp(op, "*") == 0) { return lval_num_double(x.num_long * y.num_long); }
+        if (strcmp(op, "+") == 0) { return lval_num_double(x.num_double + y.num_double); }
+        if (strcmp(op, "-") == 0) { return lval_num_double(x.num_double - y.num_double); }
+        if (strcmp(op, "*") == 0) { return lval_num_double(x.num_double * y.num_double); }
         if (strcmp(op, "/") == 0) { 
             return y.num_double == 0
                 ? lval_err(LERR_DIV_ZERO)
                 : lval_num_double(x.num_double / y.num_double);
         }
-        if (strcmp(op, "^") == 0) { return lval_num_double(power(x.num_long, y.num_long)); }
+        if (strcmp(op, "^") == 0) { return lval_num_double(power(x.num_double, y.num_double)); }
         if (strcmp(op, "min") == 0) { return (x.num_double <= y.num_double) ? lval_num_double(x.num_double) : lval_num_double(y.num_double); }
         if (strcmp(op, "max") == 0) { return (x.num_double >= y.num_double) ? lval_num_double(x.num_double) : lval_num_double(y.num_double); }
 
