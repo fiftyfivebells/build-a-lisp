@@ -29,9 +29,11 @@ void add_history(char* unused){}
 
 typedef struct {
     int type;
+    union {
     long num_long;
     double num_double;
     long err;
+    };
 } lval;
 
 enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR };
