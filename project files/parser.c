@@ -73,6 +73,53 @@ void lval_print(lval v) {
 
 // prints an lval, but with a newline after
 void lval_println(lval v) { lval_print(v); putchar('\n'); }
+lval eval_op(lval x, char* op, lval y) {
+
+    // if either value is an error, return it
+    if (x.type == LVAL_ERR) { return x; }
+    if (y.type == LVAL_ERR) { return y; }
+
+    // otherwise, do the math on the values
+    if (strcmp(op, "+") == 0) { return lval_num(x.num + y.num); }
+    if (strcmp(op, "-") == 0) { return lval_num(x.num - y.num); }
+    if (strcmp(op, "*") == 0) { return lval_num(x.num * y.num); }
+    if (strcmp(op, "/") == 0) { 
+        return y.num == 0
+            ? lval_err(LERR_DIV_ZERO)
+            : lval_num(x.num / y.num);
+    }
+    if (strcmp(op, "%") == 0) { return lval_num(x.num % y.num); }
+    if (strcmp(op, "^") == 0) { return lval_num(power(x.num, y.num)); }
+    if (strcmp(op, "n") == 0) { return lval_num(min(x.num, y.num)); }
+    if (strcmp(op, "m") == 0) { return lval_num(maximum(x.num, y.num)); }
+    
+    return lval_err(LERR_BAD_OP);
+}    
+
+lval eval(mpc_ast_t* t) {
+
+    // base case: if tagged as number, return it directly
+    if (strstr(t->tag, "number")) {
+        errno = 0;
+        long x = strtol(t->contents, NULL, 10);
+        return errno != ERANGE ? lval_num(x) : lval_err(LERR_BAD_NUM);
+    }
+
+    // operator is always the second child
+    char* op = t->children[1]->contents;
+
+    // the third child is 
+    lval x = eval(t->children[2]);
+
+    int i = 3;
+    while(strstr(t->children[i]->tag, "expr")) {
+        x = eval_op(x, op, eval(t->children[i]));
+        i++;
+    }
+
+    return x;
+}
+
 int main(int argc, char** argv) {
 
     // parsers
