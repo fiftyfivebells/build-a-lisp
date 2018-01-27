@@ -30,9 +30,9 @@ void add_history(char* unused){}
 typedef struct {
     int type;
     union {
-    long num_long;
-    double num_double;
-    long err;
+        long num_long;
+        double num_double;
+        long err;
     };
 } lval;
 
@@ -97,6 +97,7 @@ lval eval_op(lval x, char* op, lval y) {
         if (x.type == LVAL_LONG) { double x_num_double = x.num_long; x.num_double = x_num_double; }
         if (y.type == LVAL_LONG) { double y_num_double = y.num_long; y.num_double = y_num_double; }
 
+        if (strcmp(op, "%") == 0) { return lval_err(LERR_BAD_OP); }
         if (strcmp(op, "+") == 0) { return lval_num_double(x.num_double + y.num_double); }
         if (strcmp(op, "-") == 0) { return lval_num_double(x.num_double - y.num_double); }
         if (strcmp(op, "*") == 0) { return lval_num_double(x.num_double * y.num_double); }
