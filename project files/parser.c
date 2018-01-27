@@ -25,7 +25,7 @@ void add_history(char* unused){}
 #else
 #include <editline/readline.h>
 #include <histedit.h>
-#endif          
+#endif
 
 typedef struct {
     int type;
@@ -73,6 +73,7 @@ void lval_print(lval v) {
 
 // prints an lval, but with a newline after
 void lval_println(lval v) { lval_print(v); putchar('\n'); }
+
 lval eval_op(lval x, char* op, lval y) {
 
     // if either value is an error, return it
@@ -134,7 +135,7 @@ int main(int argc, char** argv) {
     "                                                     \
       number   : /-?[0-9]+/ ;                             \
       float    : /[0-9]+(\\.[0-9][0-9]?)?/ ;              \
-      operator : '+' | '-' | '*' | '/' | '%';             \
+      operator : '+' | '-' | '*' | '/' | '%' | '^' | 'm' | 'n' ; \
       expr     : <number> | '(' <operator> <expr>+ ')' ;  \
       teddy    : /^/ <operator> <expr>+ /$/ ;             \
     ",
@@ -152,8 +153,9 @@ int main(int argc, char** argv) {
         // attempt to parse user input
         mpc_result_t r;
         if (mpc_parse("<stdin>", input, Teddy, &r)) {
-            // on success print the ast
-            mpc_ast_print(r.output);
+
+            lval result = eval(r.output);
+            lval_println(result);
             mpc_ast_delete(r.output);
         } else {
             // else print the error
