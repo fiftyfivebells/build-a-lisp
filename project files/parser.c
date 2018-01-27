@@ -27,6 +27,14 @@ void add_history(char* unused){}
 #include <histedit.h>
 #endif          
 
+typedef struct {
+    int type;
+    long num;
+    long err;
+} lval;
+
+enum { LVAL_NUM, LVAL_ERR };
+enum { LERR_DIV_ZERO, LERR_BAD_OP, LERR_BAD_NUM };
 int main(int argc, char** argv) {
 
     // parsers
