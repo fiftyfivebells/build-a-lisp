@@ -133,9 +133,9 @@ int main(int argc, char** argv) {
     // define my parsers with the following language
     mpca_lang(MPCA_LANG_DEFAULT,
     "                                                     \
-      number   : /-?[0-9]+/ ;                             \
-      float    : /[0-9]+(\\.[0-9][0-9]?)?/ ;              \
-      operator : '+' | '-' | '*' | '/' | '%' | '^' | 'm' | 'n' ; \
+      number   : /-?[0-9]+(\\.[0-9]+)?/ ;                 \
+      operator : '+' | '-' | '*' | '/' | '%' | '^' |      \
+                \"min\" | \"max\" ;                       \
       expr     : <number> | '(' <operator> <expr>+ ')' ;  \
       teddy    : /^/ <operator> <expr>+ /$/ ;             \
     ",
