@@ -29,18 +29,27 @@ void add_history(char* unused){}
 
 typedef struct {
     int type;
-    long num;
+    long num_long;
+    double num_double;
     long err;
 } lval;
 
-enum { LVAL_NUM, LVAL_ERR };
+enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR };
 enum { LERR_DIV_ZERO, LERR_BAD_OP, LERR_BAD_NUM };
 
 // number type lval
-lval lval_num(long x) {
+lval lval_num_long(long x) {
     lval v;
-    v.type = LVAL_NUM;
-    v.num = x;
+    v.type = LVAL_LONG;
+    v.num_long = x;
+    return v;
+}
+
+// number type for doubles
+lval lval_num_double(double x) {
+    lval v;
+    v.type = LVAL_DOUBLE;
+    v.num_double = x;
     return v;
 }
 
@@ -54,7 +63,9 @@ lval lval_err(int x) {
 
 void lval_print(lval v) {
     switch(v.type) {
-        case LVAL_NUM: printf("%li", v.num);
+        case LVAL_LONG: printf("%li", v.num_long);
+        break;
+        case LVAL_DOUBLE: printf("%lf", v.num_double);
         break;
 
         case LVAL_ERR:
@@ -80,19 +91,38 @@ lval eval_op(lval x, char* op, lval y) {
     if (x.type == LVAL_ERR) { return x; }
     if (y.type == LVAL_ERR) { return y; }
 
-    // otherwise, do the math on the values
-    if (strcmp(op, "+") == 0) { return lval_num(x.num + y.num); }
-    if (strcmp(op, "-") == 0) { return lval_num(x.num - y.num); }
-    if (strcmp(op, "*") == 0) { return lval_num(x.num * y.num); }
-    if (strcmp(op, "/") == 0) { 
-        return y.num == 0
-            ? lval_err(LERR_DIV_ZERO)
-            : lval_num(x.num / y.num);
+    if (x.type == LVAL_DOUBLE || y.type == LVAL_DOUBLE) {
+        if (x.type == LVAL_LONG) { double x_num_double = x.num_long; x.num_double = x_num_double; }
+        if (y.type == LVAL_LONG) { double y_num_double = y.num_long; y.num_double = y_num_double; }
+
+        if (strcmp(op, "+") == 0) { return lval_num_double(x.num_long + y.num_long); }
+        if (strcmp(op, "-") == 0) { return lval_num_double(x.num_long - y.num_long); }
+        if (strcmp(op, "*") == 0) { return lval_num_double(x.num_long * y.num_long); }
+        if (strcmp(op, "/") == 0) { 
+            return y.num_double == 0
+                ? lval_err(LERR_DIV_ZERO)
+                : lval_num_double(x.num_double / y.num_double);
+        }
+        if (strcmp(op, "^") == 0) { return lval_num_double(power(x.num_long, y.num_long)); }
+        if (strcmp(op, "n") == 0) { return lval_num_double(min(x.num_long, y.num_long)); }
+        if (strcmp(op, "m") == 0) { return lval_num_double(maximum(x.num_long, y.num_long)); }
+
+
     }
-    if (strcmp(op, "%") == 0) { return lval_num(x.num % y.num); }
-    if (strcmp(op, "^") == 0) { return lval_num(power(x.num, y.num)); }
-    if (strcmp(op, "n") == 0) { return lval_num(min(x.num, y.num)); }
-    if (strcmp(op, "m") == 0) { return lval_num(maximum(x.num, y.num)); }
+
+    // otherwise, do the math on the values
+    if (strcmp(op, "+") == 0) { return lval_num_long(x.num_long + y.num_long); }
+    if (strcmp(op, "-") == 0) { return lval_num_long(x.num_long - y.num_long); }
+    if (strcmp(op, "*") == 0) { return lval_num_long(x.num_long * y.num_long); }
+    if (strcmp(op, "/") == 0) { 
+        return y.num_long == 0
+            ? lval_err(LERR_DIV_ZERO)
+            : lval_num_long(x.num_long / y.num_long);
+    }
+    if (strcmp(op, "%") == 0) { return lval_num_long(x.num_long % y.num_long); }
+    if (strcmp(op, "^") == 0) { return lval_num_long(power(x.num_long, y.num_long)); }
+    if (strcmp(op, "n") == 0) { return lval_num_long(min(x.num_long, y.num_long)); }
+    if (strcmp(op, "m") == 0) { return lval_num_long(maximum(x.num_long, y.num_long)); }
     
     return lval_err(LERR_BAD_OP);
 }    
@@ -102,8 +132,13 @@ lval eval(mpc_ast_t* t) {
     // base case: if tagged as number, return it directly
     if (strstr(t->tag, "number")) {
         errno = 0;
+
+        if (strchr(t->contents, '.') != NULL) {
+            double x_double = strtof(t->contents, NULL);
+            return errno != ERANGE ? lval_num_double(x_double) : lval_err(LERR_BAD_NUM);
+        }
         long x = strtol(t->contents, NULL, 10);
-        return errno != ERANGE ? lval_num(x) : lval_err(LERR_BAD_NUM);
+        return errno != ERANGE ? lval_num_long(x) : lval_err(LERR_BAD_NUM);
     }
 
     // operator is always the second child
@@ -125,7 +160,6 @@ int main(int argc, char** argv) {
 
     // parsers
     mpc_parser_t* Number = mpc_new("number");
-    mpc_parser_t* Float = mpc_new("float");
     mpc_parser_t* Operator = mpc_new("operator");
     mpc_parser_t* Expr = mpc_new("expr");
     mpc_parser_t* Teddy = mpc_new("teddy");
