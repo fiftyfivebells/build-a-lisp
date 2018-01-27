@@ -104,8 +104,8 @@ lval eval_op(lval x, char* op, lval y) {
                 : lval_num_double(x.num_double / y.num_double);
         }
         if (strcmp(op, "^") == 0) { return lval_num_double(power(x.num_long, y.num_long)); }
-        if (strcmp(op, "min") == 0) { return lval_num_double(min(x.num_long, y.num_long)); }
-        if (strcmp(op, "max") == 0) { return lval_num_double(maximum(x.num_long, y.num_long)); }
+        if (strcmp(op, "min") == 0) { return (x.num_double <= y.num_double) ? lval_num_double(x.num_double) : lval_num_double(y.num_double); }
+        if (strcmp(op, "max") == 0) { return (x.num_double >= y.num_double) ? lval_num_double(x.num_double) : lval_num_double(y.num_double); }
 
 
     }
@@ -121,8 +121,8 @@ lval eval_op(lval x, char* op, lval y) {
     }
     if (strcmp(op, "%") == 0) { return lval_num_long(x.num_long % y.num_long); }
     if (strcmp(op, "^") == 0) { return lval_num_long(power(x.num_long, y.num_long)); }
-    if (strcmp(op, "min") == 0) { return lval_num_long(min(x.num_long, y.num_long)); }
-    if (strcmp(op, "max") == 0) { return lval_num_long(maximum(x.num_long, y.num_long)); }
+    if (strcmp(op, "min") == 0) { return (x.num_long <= y.num_long) ? lval_num_long(x.num_long) : lval_num_long(y.num_long); }
+    if (strcmp(op, "max") == 0) { return (x.num_long >= y.num_long) ? lval_num_long(x.num_long) : lval_num_long(y.num_long); }
     
     return lval_err(LERR_BAD_OP);
 }    

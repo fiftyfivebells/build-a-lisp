@@ -8,17 +8,3 @@ long power(long x, long y) {
     }
     return result;
 }
-
-long min(long x, long y) {
-    if (x < y) { return x; }
-    else if (x >= y) { return y; }
-
-    return 0;
-}
-
-long maximum(long x, long y) {
-    if (x < y) { return y; }
-    else if (x >= y) { return x; }
-
-    return 0;
-}
