@@ -104,8 +104,8 @@ lval eval_op(lval x, char* op, lval y) {
                 : lval_num_double(x.num_double / y.num_double);
         }
         if (strcmp(op, "^") == 0) { return lval_num_double(power(x.num_long, y.num_long)); }
-        if (strcmp(op, "n") == 0) { return lval_num_double(min(x.num_long, y.num_long)); }
-        if (strcmp(op, "m") == 0) { return lval_num_double(maximum(x.num_long, y.num_long)); }
+        if (strcmp(op, "min") == 0) { return lval_num_double(min(x.num_long, y.num_long)); }
+        if (strcmp(op, "max") == 0) { return lval_num_double(maximum(x.num_long, y.num_long)); }
 
 
     }
@@ -121,8 +121,8 @@ lval eval_op(lval x, char* op, lval y) {
     }
     if (strcmp(op, "%") == 0) { return lval_num_long(x.num_long % y.num_long); }
     if (strcmp(op, "^") == 0) { return lval_num_long(power(x.num_long, y.num_long)); }
-    if (strcmp(op, "n") == 0) { return lval_num_long(min(x.num_long, y.num_long)); }
-    if (strcmp(op, "m") == 0) { return lval_num_long(maximum(x.num_long, y.num_long)); }
+    if (strcmp(op, "min") == 0) { return lval_num_long(min(x.num_long, y.num_long)); }
+    if (strcmp(op, "max") == 0) { return lval_num_long(maximum(x.num_long, y.num_long)); }
     
     return lval_err(LERR_BAD_OP);
 }    
@@ -144,7 +144,6 @@ lval eval(mpc_ast_t* t) {
     // operator is always the second child
     char* op = t->children[1]->contents;
 
-    // the third child is 
     lval x = eval(t->children[2]);
 
     int i = 3;
@@ -173,7 +172,7 @@ int main(int argc, char** argv) {
       expr     : <number> | '(' <operator> <expr>+ ')' ;  \
       teddy    : /^/ <operator> <expr>+ /$/ ;             \
     ",
-    Number, Float, Operator, Expr, Teddy);
+    Number, Operator, Expr, Teddy);
 
     puts("Teddy Version 0.0.0.0.1");
     puts("Welcome to the party!");
