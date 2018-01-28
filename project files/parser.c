@@ -32,8 +32,10 @@ typedef struct {
     union {
         long num_long;
         double num_double;
-        long err;
+        char* err;
+        char* sym;
     };
+    struct lval** cell;
 } lval;
 
 enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR, LVAL_SYM, LVAL_SEXPR };
