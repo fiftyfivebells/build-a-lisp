@@ -75,6 +75,15 @@ lval* lval_sym(char* s) {
     return v;
 }
 
+// pointer to a sexpr lval
+lval* lval_sexpr(void) {
+    lval* v = malloc(sizeof(lval));
+    v->type = LVAL_SEXPR;
+    v->count = 0;
+    v->cell = NULL;
+    return v;
+}
+
 void lval_print(lval v) {
     switch(v.type) {
         case LVAL_LONG: printf("%li", v.num_long);
