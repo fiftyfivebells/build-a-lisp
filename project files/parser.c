@@ -36,7 +36,7 @@ typedef struct {
     };
 } lval;
 
-enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR };
+enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR, LVAL_SYM, LVAL_SEXPR };
 enum { LERR_DIV_ZERO, LERR_BAD_OP, LERR_BAD_NUM };
 
 // number type lval
