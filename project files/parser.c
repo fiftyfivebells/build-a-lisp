@@ -142,6 +142,13 @@ lval* lval_read(mpc_ast_t* t) {
     }
 }
 
+lval* lval_add(lval* v, lval* x) {
+    v->count++;
+    v->cell = realloc(v->, sizeof(lval*) * v->count);
+    v->cell[v->count-1] = x;
+    return v;
+}
+
 void lval_print(lval v) {
     switch(v.type) {
         case LVAL_LONG: printf("%li", v.num_long);
