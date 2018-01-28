@@ -122,6 +122,26 @@ lval* lval_read_num(mpc_ast_t* t) {
     return errno != ERANGE ?
         lval_num_long(x) : lval_err("That's a bad number.");
 }
+
+lval* lval_read(mpc_ast_t* t) {
+
+    // if it's a smybol or number, return the conversion of that type
+    if (strstr(t->tag, "number")) { return lval_read_num(t); }
+    if (strstr(t->tag, "symbol")) { return lval_sym(t->contents); }
+
+    // if it's the root or a sexpr, create an empty list
+    lval* x = NULL;
+    if (strcmp(t->tag, ">") == 0) { x = lval_sexpr(); }
+    if (strstr(t->tag, "sexpr"))  { x = lval_sexpr(); }
+
+    for (int i = 0; i < t->children_num; i++) {
+        if (strcmp(t->children[i]->contents, "(") == 0) { continue; }
+        if (strcmp(t->children[i]->contents, ")") == 0) { continue; }
+        if (strcmp(t->children[i]->tag,  "regex") == 0) { continue; }
+        x = lval_add(x, lval_read(t->children[i]));
+    }
+}
+
 void lval_print(lval v) {
     switch(v.type) {
         case LVAL_LONG: printf("%li", v.num_long);
