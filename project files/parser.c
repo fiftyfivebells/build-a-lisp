@@ -162,18 +162,20 @@ int main(int argc, char** argv) {
 
     // parsers
     mpc_parser_t* Number = mpc_new("number");
-    mpc_parser_t* Operator = mpc_new("operator");
-    mpc_parser_t* Expr = mpc_new("expr");
-    mpc_parser_t* Teddy = mpc_new("teddy");
+    mpc_parser_t* Symbol = mpc_new("symbol");
+    mpc_parser_t* Sexpr  = mpc_new("sexpr");
+    mpc_parser_t* Expr   = mpc_new("expr");
+    mpc_parser_t* Teddy  = mpc_new("teddy");
 
     // define my parsers with the following language
     mpca_lang(MPCA_LANG_DEFAULT,
     "                                                     \
       number   : /-?[0-9]+(\\.[0-9]+)?/ ;                 \
-      operator : '+' | '-' | '*' | '/' | '%' | '^' |      \
+      symbol   : '+' | '-' | '*' | '/' | '%' | '^' |      \
                 \"min\" | \"max\" ;                       \
-      expr     : <number> | '(' <operator> <expr>+ ')' ;  \
-      teddy    : /^/ <operator> <expr>+ /$/ ;             \
+      sepr     : '(' <expr>* ')' ;                        \
+      expr     : <number> | <symbol> | <sexpr> ;          \
+      teddy    : /^/ <expr>* /$/ ;                        \
     ",
     Number, Operator, Expr, Teddy);
 
@@ -203,7 +205,7 @@ int main(int argc, char** argv) {
     }
 
     // undefined and delete the parsers
-    mpc_cleanup(4, Number, Operator, Expr, Teddy);
+    mpc_cleanup(5, Number, Symbol, Sexpr, Expr, Teddy);
 
     return 0;
 }
