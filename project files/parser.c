@@ -42,7 +42,7 @@ typedef struct {
 enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR, LVAL_SYM, LVAL_SEXPR };
 enum { LERR_DIV_ZERO, LERR_BAD_OP, LERR_BAD_NUM };
 
-// number type lval
+// pointer to a number lval
 lval* lval_num_long(long x) {
     lval* v = malloc(sizeof(lval));
     v->type = LVAL_LONG;
@@ -50,7 +50,7 @@ lval* lval_num_long(long x) {
     return v;
 }
 
-// number type for doubles
+// pointer to a double lval
 lval* lval_num_double(double x) {
     lval* v = malloc(sizeof(lval));
     v->type = LVAL_DOUBLE;
@@ -58,11 +58,20 @@ lval* lval_num_double(double x) {
     return v;
 }
 
-// error type lval
+// pointer to an error lval
 lval* lval_err(int x) {
     lval* v = malloc(sizeof(lval));
     v->type = LVAL_ERR;
     v->err = x;
+    return v;
+}
+
+// pointer to a symbol lval
+lval* lval_sym(char* s) {
+    lval* v = malloc(sizeof(lval));
+    v->type = LVAL_SYM;
+    v->sym = malloc(strlen(s) + 1);
+    strcpy(v->sym, s);
     return v;
 }
 
