@@ -43,26 +43,26 @@ enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR, LVAL_SYM, LVAL_SEXPR };
 enum { LERR_DIV_ZERO, LERR_BAD_OP, LERR_BAD_NUM };
 
 // number type lval
-lval lval_num_long(long x) {
-    lval v;
-    v.type = LVAL_LONG;
-    v.num_long = x;
+lval* lval_num_long(long x) {
+    lval* v = malloc(sizeof(lval));
+    v->type = LVAL_LONG;
+    v->num_long = x;
     return v;
 }
 
 // number type for doubles
-lval lval_num_double(double x) {
-    lval v;
-    v.type = LVAL_DOUBLE;
-    v.num_double = x;
+lval* lval_num_double(double x) {
+    lval* v = malloc(sizeof(lval));
+    v->type = LVAL_DOUBLE;
+    v->num_double = x;
     return v;
 }
 
 // error type lval
-lval lval_err(int x) {
-    lval v;
-    v.type = LVAL_ERR;
-    v.err = x;
+lval* lval_err(int x) {
+    lval* v = malloc(sizeof(lval));
+    v->type = LVAL_ERR;
+    v->err = x;
     return v;
 }
 
