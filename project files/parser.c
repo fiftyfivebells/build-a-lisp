@@ -110,6 +110,18 @@ void lval_del(lval* v) {
     free(v);
 }
 
+lval* lval_read_num(mpc_ast_t* t) {
+    errno = 0;
+
+    if (strchr(t->contents, '.') != NULL) {
+        double x_double = strtof(t->contents, NULL);
+            return errno != ERANGE ? lval_num_double(x_double) : lval_err("That's a bad number.");
+    }
+
+    long x = strtol(t->contents, null, 10);
+    return errno != ERANGE ?
+        lval_num_long(x) : lval_err("That's a bad number.");
+}
 void lval_print(lval v) {
     switch(v.type) {
         case LVAL_LONG: printf("%li", v.num_long);
