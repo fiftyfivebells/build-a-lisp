@@ -150,23 +150,20 @@ lval* lval_add(lval* v, lval* x) {
 }
 
 void lval_print(lval* v) {}
-void lval_print(lval v) {
-    switch(v.type) {
-        case LVAL_LONG: printf("%li", v.num_long);
-        break;
-        case LVAL_DOUBLE: printf("%lf", v.num_double);
-        break;
 
-        case LVAL_ERR:
-            if (v.err == LERR_DIV_ZERO) {
-                printf("Error: you can't divide by zero!");
-            }
-            if (v.err == LERR_BAD_OP) {
-                printf("That's a bad operator, don't use it!");
-            }
-            if (v.err == LERR_BAD_NUM) {
-                printf("Bad number, shouldn't have used that!");
-            }
+void lval_expr_print(lval* v, char open, char close) {
+    putchar(open);
+    for (int i = 0; i < v->count; i++) {
+        lval_print(v->cell[i]);
+
+        // no trailing spaces if last element
+        if (i != (v->count-1)) {
+            putchar(' ');
+        }
+    }
+    putchar(close);
+}
+
 void lval_print(lval* v) {
     switch(v->type) {
         case LVAL_LONG:   printf("%li", v->num_long); break;
