@@ -167,12 +167,17 @@ void lval_print(lval v) {
             if (v.err == LERR_BAD_NUM) {
                 printf("Bad number, shouldn't have used that!");
             }
-        break;
+void lval_print(lval* v) {
+    switch(v->type) {
+        case LVAL_LONG:   printf("%li", v->num_long); break;
+        case LVAL_DOUBLE: printf("%lf", v->num_double); break;
+        case LVAL_ERR:    printf("Error: %s", v->err); break;
+        case LVAL_SEXPR:  lval_expr_print(v, '(', ')'); break;
     }
 }
 
 // prints an lval, but with a newline after
-void lval_println(lval v) { lval_print(v); putchar('\n'); }
+void lval_println(lval* v) { lval_print(v); putchar('\n'); }
 
 lval eval_op(lval x, char* op, lval y) {
 
