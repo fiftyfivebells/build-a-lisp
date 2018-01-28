@@ -29,12 +29,10 @@ void add_history(char* unused){}
 
 typedef struct {
     int type;
-    union {
         long num_long;
         double num_double;
         char* err;
         char* sym;
-    };
     int count;
     struct lval** cell;
 } lval;
