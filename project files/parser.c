@@ -35,6 +35,7 @@ typedef struct {
         char* err;
         char* sym;
     };
+    int count;
     struct lval** cell;
 } lval;
 
