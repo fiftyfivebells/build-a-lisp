@@ -149,6 +149,7 @@ lval* lval_add(lval* v, lval* x) {
     return v;
 }
 
+void lval_print(lval* v) {}
 void lval_print(lval v) {
     switch(v.type) {
         case LVAL_LONG: printf("%li", v.num_long);
