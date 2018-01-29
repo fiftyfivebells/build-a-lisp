@@ -180,7 +180,20 @@ void lval_print(lval* v) {
 // prints an lval, but with a newline after
 void lval_println(lval* v) { lval_print(v); putchar('\n'); }
 
-lval eval_op(lval x, char* op, lval y) {
+// takes first element from s-expression and shifts the rest into its place
+lval* lval_pop(lval* v, int i) {
+    // get item at index i
+    lval* x = v->cell[i];
+
+    // move memory down one after taking item at i
+    memmove(&v->cell[i], &v->cell[i+1],
+        sizeof(lval*) * (v->count-i-1));
+
+    v->count--;
+
+    v->cell = realloc(v->cell, sizeof(lval*) * v->count);
+    return x;
+}
 
     // if either value is an error, return it
     if (x.type == LVAL_ERR) { return x; }
