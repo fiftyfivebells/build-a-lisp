@@ -201,6 +201,101 @@ lval* lval_take(lval* v, int i) {
     lval_del(v);
     return x;
 }
+
+lval* builtin_op(lval* a, char* op) {
+
+    // check if all arguments are numbers, throw error if not
+    for (int i = 0; i < a->count; i++) {
+        if (a->cell[i]->type != LVAL_DOUBLE && a->cell[i]->type != LVAL_LONG) {
+            lval_del(a);
+            return lval_err("You need to give me numbers!");
+        }
+    }
+
+    lval* x = lval_pop(a, 0);
+
+    if ((strcmp(op, "-") == 0) && a->count == 0) {
+        if (x->type == LVAL_DOUBLE) {
+            x->num_double = -x->num_double;
+        } else if (x->type == LVAL_LONG) {
+            x->num_long = -x->num_long;
+        }
+    }
+
+    while (a->count > 0) {
+
+        lval* y = lval_pop(a, 0);
+
+        if (y->type == LVAL_DOUBLE) {
+            if (strcmp(op, "+") == 0) { x->num_double += y->num_double; }
+            if (strcmp(op, "-") == 0) { x->num_double -= y->num_double; }
+            if (strcmp(op, "*") == 0) { x->num_double *= y->num_double; }
+            if (strcmp(op, "/") == 0) { 
+                if (y->num_double == 0) {
+                    lval_del(x); lval_del(y);
+                    x = lval_err("Are you serious? You can't divide by zero!");
+                    break;
+                } 
+                x->num_double = y->num_double;
+            }
+        } else if (y->type == LVAL_LONG) {
+            if (strcmp(op, "+") == 0) { x->num_long += y->num_long; }
+            if (strcmp(op, "-") == 0) { x->num_long -= y->num_long; }
+            if (strcmp(op, "*") == 0) { x->num_long *= y->num_long; }
+            if (strcmp(op, "/") == 0) { 
+                if (y->num_long == 0) {
+                    lval_del(x); lval_del(y);
+                    x = lval_err("Are you serious? You can't divide by zero!");
+                    break;
+                } 
+                x->num_long = y->num_long;
+            }
+        }
+        lval_del(y);
+    }
+
+    lval_del(a);
+    return x;
+}
+
+lval* lval_eval_sexpr(lval* v);
+
+lval* lval_eval(lval* v) {
+    if (v->type == LVAL_SEXPR) { return lval_eval_sexpr(v); }
+
+    // anything other than an s-expression is returned as is
+    return v;
+}
+
+lval* lval_eval_sexpr(lval* v) {
+
+    // evaluate children
+    for (int i = 0; i < v->count; i++) {
+        v->cell[i] = lval_eval(v->cell[i]);
+    }
+
+    // check for errors
+    for (int i = 0; i < v->count; i++) {
+        if (v->cell[i]->type == LVAL_ERR) { return lval_take(v, i); }
+    }
+
+    // empty expression
+    if (v->count == 0) { return v; }
+
+    // single expression
+    if (v->count == 1) { return lval_take(v, 0); }
+
+    // make sure first element is a symbol
+    lval* f = lval_pop(v, 0);
+    if (f->type != LVAL_SYM) {
+        lval_del(f); lval_del(v);
+        return lval_err("You need to start with a symbol!");
+    }
+
+    // call built-in operator
+    lval* result = builtin_op(v, f->sym);
+    lval_del(f);
+    return result;
 }
 
     // if either value is an error, return it
