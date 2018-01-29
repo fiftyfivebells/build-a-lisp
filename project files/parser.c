@@ -125,7 +125,7 @@ lval* lval_read_num(mpc_ast_t* t) {
             return errno != ERANGE ? lval_num_double(x_double) : lval_err("That's a bad number.");
     }
 
-    long x = strtol(t->contents, null, 10);
+    long x = strtol(t->contents, NULL, 10);
     return errno != ERANGE ?
         lval_num_long(x) : lval_err("That's a bad number.");
 }
