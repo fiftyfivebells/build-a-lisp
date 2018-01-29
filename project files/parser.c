@@ -265,11 +265,11 @@ int main(int argc, char** argv) {
       number   : /-?[0-9]+(\\.[0-9]+)?/ ;                 \
       symbol   : '+' | '-' | '*' | '/' | '%' | '^' |      \
                 \"min\" | \"max\" ;                       \
-      sepr     : '(' <expr>* ')' ;                        \
+      sexpr     : '(' <expr>* ')' ;                        \
       expr     : <number> | <symbol> | <sexpr> ;          \
       teddy    : /^/ <expr>* /$/ ;                        \
     ",
-    Number, Operator, Expr, Teddy);
+    Number, Symbol, Sexpr, Expr, Teddy);
 
     puts("Teddy Version 0.0.0.0.1");
     puts("Welcome to the party!");
