@@ -195,6 +195,14 @@ lval* lval_pop(lval* v, int i) {
     return x;
 }
 
+// takes the first element in the s-expression, deletes the rest
+lval* lval_take(lval* v, int i) {
+    lval* x = lval_pop(v, i);
+    lval_del(v);
+    return x;
+}
+}
+
     // if either value is an error, return it
     if (x.type == LVAL_ERR) { return x; }
     if (y.type == LVAL_ERR) { return y; }
