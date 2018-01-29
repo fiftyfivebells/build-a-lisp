@@ -27,7 +27,7 @@ void add_history(char* unused){}
 #include <histedit.h>
 #endif
 
-typedef struct {
+typedef struct lval {
     int type;
         long num_long;
         double num_double;
