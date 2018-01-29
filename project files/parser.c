@@ -152,7 +152,7 @@ lval* lval_read(mpc_ast_t* t) {
     return x;
 }
 
-void lval_print(lval* v) {}
+void lval_print(lval* v);
 
 void lval_expr_print(lval* v, char open, char close) {
     putchar(open);
