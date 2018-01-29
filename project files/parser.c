@@ -57,10 +57,11 @@ lval* lval_num_double(double x) {
 }
 
 // pointer to an error lval
-lval* lval_err(int x) {
+lval* lval_err(char* m) {
     lval* v = malloc(sizeof(lval));
     v->type = LVAL_ERR;
-    v->err = x;
+    v->err = malloc(strlen(m) + 1);
+    strcpy(v->err, m);
     return v;
 }
 
