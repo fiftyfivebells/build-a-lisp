@@ -331,10 +331,9 @@ int main(int argc, char** argv) {
         // attempt to parse user input
         mpc_result_t r;
         if (mpc_parse("<stdin>", input, Teddy, &r)) {
-
-            lval result = eval(r.output);
-            lval_println(result);
-            mpc_ast_delete(r.output);
+            lval* x = lval_eval(lval_read(r.output));
+            lval_println(x);
+            lval_del(x);
         } else {
             // else print the error
             mpc_err_print(r.error);
