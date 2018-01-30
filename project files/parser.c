@@ -215,45 +215,13 @@ lval* lval_take(lval* v, int i) {
     return x;
 }
 
+lval* lval_eval_sexpr(lval* v);
+
 lval* lval_eval(lval* v) {
     if (v->type == LVAL_SEXPR) { return lval_eval_sexpr(v); }
 
     // anything other than an s-expression is returned as is
     return v;
-}
-
-
-lval* lval_eval_sexpr(lval* v);
-
-lval* lval_eval_sexpr(lval* v) {
-
-    // evaluate children
-    for (int i = 0; i < v->count; i++) {
-        v->cell[i] = lval_eval(v->cell[i]);
-    }
-
-    // check for errors
-    for (int i = 0; i < v->count; i++) {
-        if (v->cell[i]->type == LVAL_ERR) { return lval_take(v, i); }
-    }
-
-    // empty expression
-    if (v->count == 0) { return v; }
-
-    // single expression
-    if (v->count == 1) { return lval_take(v, 0); }
-
-    // make sure first element is a symbol
-    lval* f = lval_pop(v, 0);
-    if (f->type != LVAL_SYM) {
-        lval_del(f); lval_del(v);
-        return lval_err("You need to start with a symbol!");
-    }
-
-    // call built-in operator
-    lval* result = builtin(v, f->sym);
-    lval_del(f);
-    return result;
 }
 
 lval* builtin_op(lval* a, char* op) {
@@ -399,6 +367,37 @@ lval* builtin(lval* a, char* func) {
     if (strstr("+-*/", func)) { return builtin_op(a, func); }
     lval_del(a);
     return lval_err("I don't know that function!");
+}
+
+lval* lval_eval_sexpr(lval* v) {
+
+    // evaluate children
+    for (int i = 0; i < v->count; i++) {
+        v->cell[i] = lval_eval(v->cell[i]);
+    }
+
+    // check for errors
+    for (int i = 0; i < v->count; i++) {
+        if (v->cell[i]->type == LVAL_ERR) { return lval_take(v, i); }
+    }
+
+    // empty expression
+    if (v->count == 0) { return v; }
+
+    // single expression
+    if (v->count == 1) { return lval_take(v, 0); }
+
+    // make sure first element is a symbol
+    lval* f = lval_pop(v, 0);
+    if (f->type != LVAL_SYM) {
+        lval_del(f); lval_del(v);
+        return lval_err("You need to start with a symbol!");
+    }
+
+    // call built-in operator
+    lval* result = builtin(v, f->sym);
+    lval_del(f);
+    return result;
 }
 
 int main(int argc, char** argv) {
