@@ -325,14 +325,14 @@ int main(int argc, char** argv) {
 
     // define my parsers with the following language
     mpca_lang(MPCA_LANG_DEFAULT,
-    "                                                     \
-      number   : /-?[0-9]+(\\.[0-9]+)?/ ;                 \
-      symbol   : '+' | '-' | '*' | '/' | '%' | '^' |      \
-                \"min\" | \"max\" ;                       \
-      sexpr    :  '(' <expr>* ')' ;                       \
-      qexpr    :  '{' <expr>* '}' ;                       \
-      expr     : <number> | <symbol> | <sexpr> | qexpr ;  \
-      teddy    : /^/ <expr>* /$/ ;                        \
+    "                                                      \
+      number   : /-?[0-9]+(\\.[0-9]+)?/ ;                  \
+      symbol   : '+' | '-' | '*' | '/' | '%' | '^' |       \
+                \"min\" | \"max\" ;                        \
+      sexpr    :  '(' <expr>* ')' ;                        \
+      qexpr    :  '{' <expr>* '}' ;                        \
+      expr     : <number> | <symbol> | <sexpr> | <qexpr> ; \
+      teddy    : /^/ <expr>* /$/ ;                         \
     ",
     Number, Symbol, Sexpr, Qexpr, Expr, Teddy);
 
