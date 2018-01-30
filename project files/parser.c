@@ -291,6 +291,22 @@ lval* builtin_head(lval* a) {
     return v;
 }
 
+lval* builtin_tail(lval* a) {
+    // error conditions
+    LASSERT(a, a->count == 1,
+        "Function 'tail' only takes ONE argument!");
+    LASSERT(a, a->cell[0]->type != LVAL_QEXPR,
+        "You passed 'tail' the wrong thing!");
+    LASSERT(a, a->cell[0]->count == 0,
+        "You passed 'tail' an empty list!");
+
+    lval* v = lval_take(a, 0);
+
+    // delete first element and return the rest
+    lval_del(lval_pop(v, 0));
+    return v;    
+}
+
 lval* lval_eval_sexpr(lval* v);
 
 lval* lval_eval(lval* v) {
