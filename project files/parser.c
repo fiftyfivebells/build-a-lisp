@@ -351,6 +351,7 @@ int main(int argc, char** argv) {
             lval* x = lval_eval(lval_read(r.output));
             lval_println(x);
             lval_del(x);
+            mpc_ast_delete(r.output);
         } else {
             // else print the error
             mpc_err_print(r.error);
@@ -361,7 +362,7 @@ int main(int argc, char** argv) {
     }
 
     // undefined and delete the parsers
-    mpc_cleanup(5, Number, Symbol, Sexpr, Qexpr, Expr, Teddy);
+    mpc_cleanup(6, Number, Symbol, Sexpr, Qexpr, Expr, Teddy);
 
     return 0;
 }
