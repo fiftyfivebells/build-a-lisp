@@ -262,6 +262,11 @@ lval* builtin_op(lval* a, char* op) {
                 } 
                 x->num_double = y->num_double;
             }
+            if (strcmp(op, "%") == 0) {
+                lval_del(x); lval_del(y);
+                x = lval_err("You can't use modulo with doubles!");
+                break;
+            }
         } else if (y->type == LVAL_LONG) {
             if (strcmp(op, "+") == 0) { x->num_long += y->num_long; }
             if (strcmp(op, "-") == 0) { x->num_long -= y->num_long; }
