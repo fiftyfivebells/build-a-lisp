@@ -226,7 +226,9 @@ lval* builtin_op(lval* a, char* op) {
 
         lval* y = lval_pop(a, 0);
 
-        if (y->type == LVAL_DOUBLE) {
+        if (x->type == LVAL_DOUBLE || y->type == LVAL_DOUBLE) {
+            if (x->type == LVAL_LONG) { double x_double = x->num_long; x->type = LVAL_DOUBLE; x->num_double = x_double; }
+            if (y->type == LVAL_LONG) { double y_double = y->num_long; y->type = LVAL_DOUBLE; y->num_double = y_double; }
             if (strcmp(op, "+") == 0) { x->num_double += y->num_double; }
             if (strcmp(op, "-") == 0) { x->num_double -= y->num_double; }
             if (strcmp(op, "*") == 0) { x->num_double *= y->num_double; }
