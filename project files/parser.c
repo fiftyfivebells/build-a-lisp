@@ -330,8 +330,8 @@ int main(int argc, char** argv) {
       symbol   : '+' | '-' | '*' | '/' | '%' | '^' |      \
                 \"min\" | \"max\" ;                       \
       sexpr    :  '(' <expr>* ')' ;                       \
-      qexpr    : '{' <expr>* '}' ;                        \
-      expr     : <number> | <symbol> | <sexpr> ;          \
+      qexpr    :  '{' <expr>* '}' ;                       \
+      expr     : <number> | <symbol> | <sexpr> | qexpr ;  \
       teddy    : /^/ <expr>* /$/ ;                        \
     ",
     Number, Symbol, Sexpr, Qexpr, Expr, Teddy);
