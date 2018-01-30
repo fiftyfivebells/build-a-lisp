@@ -395,7 +395,7 @@ lval* lval_eval_sexpr(lval* v) {
     }
 
     // call built-in operator
-    lval* result = builtin_op(v, f->sym);
+    lval* result = builtin(v, f->sym);
     lval_del(f);
     return result;
 }
