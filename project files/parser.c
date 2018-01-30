@@ -273,6 +273,9 @@ lval* builtin_op(lval* a, char* op) {
     return x;
 }
 
+#define LASSERT(args, cond, err) \
+    if (!(cond)) { lval_del(args); return lval_err(err); }
+
 lval* lval_eval_sexpr(lval* v);
 
 lval* lval_eval(lval* v) {
