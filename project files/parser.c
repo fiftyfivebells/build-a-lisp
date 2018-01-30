@@ -348,7 +348,7 @@ int main(int argc, char** argv) {
     }
 
     // undefined and delete the parsers
-    mpc_cleanup(5, Number, Symbol, Sexpr, Expr, Teddy);
+    mpc_cleanup(5, Number, Symbol, Sexpr, Qexpr, Expr, Teddy);
 
     return 0;
 }
