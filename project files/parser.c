@@ -37,7 +37,7 @@ typedef struct lval {
     struct lval** cell;
 } lval;
 
-enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR, LVAL_SYM, LVAL_SEXPR };
+enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR, LVAL_SYM, LVAL_SEXPR, LVAL_QEXPR };
 
 // pointer to a number lval
 lval* lval_num_long(long x) {
