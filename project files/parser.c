@@ -307,6 +307,11 @@ lval* builtin_tail(lval* a) {
     return v;    
 }
 
+lval* builtin_list(lval* a) {
+    a->type = LVAL_QEXPR;
+    return a;
+}
+
 lval* lval_eval_sexpr(lval* v);
 
 lval* lval_eval(lval* v) {
