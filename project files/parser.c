@@ -82,6 +82,15 @@ lval* lval_sexpr(void) {
     return v;
 }
 
+// pointer to empty qexpr lval
+lval* lval_qexpr(void) {
+    lval* v = malloc(sizeof(lval));
+    v->type = LVAL_QEXPR;
+    v->count = 0;
+    v->cell = NULL;
+    return v;
+}
+
 // this function deletes pointers to lvals
 void lval_del(lval* v) {
 
