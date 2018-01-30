@@ -215,6 +215,13 @@ lval* lval_take(lval* v, int i) {
     return x;
 }
 
+lval* lval_eval(lval* v) {
+    if (v->type == LVAL_SEXPR) { return lval_eval_sexpr(v); }
+
+    // anything other than an s-expression is returned as is
+    return v;
+}
+
 lval* builtin_op(lval* a, char* op) {
 
     // check if all arguments are numbers, throw error if not
@@ -361,13 +368,6 @@ lval* builtin(lval* a, char* func) {
 }
 
 lval* lval_eval_sexpr(lval* v);
-
-lval* lval_eval(lval* v) {
-    if (v->type == LVAL_SEXPR) { return lval_eval_sexpr(v); }
-
-    // anything other than an s-expression is returned as is
-    return v;
-}
 
 lval* lval_eval_sexpr(lval* v) {
 
