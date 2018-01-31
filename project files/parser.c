@@ -381,12 +381,28 @@ lval* builtin_len(lval* a) {
     return v;
 }
 
+lval* builtin_init(lval* a) {
+    LASSERT(a, a->count == 1,
+        "Function 'init' only takes ONE argument!");
+    LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
+        "You passed 'init' the wrong thing!");
+    LASSERT(a, a->cell[0]->count != 0,
+        "You passed 'init' an empty list!");
+
+    lval* v = lval_take(a, 0);
+
+    lval_del(lval_pop(v, v->count - 1));
+
+    return v;
+}
+
 lval* builtin(lval* a, char* func) {
     if (strcmp("list", func) == 0) { return builtin_list(a); }
     if (strcmp("head", func) == 0) { return builtin_head(a); }
     if (strcmp("tail", func) == 0) { return builtin_tail(a); }
     if (strcmp("join", func) == 0) { return builtin_join(a); }
     if (strcmp("eval", func) == 0) { return builtin_eval(a); }
+    if (strcmp("init", func) == 0) { return builtin_init(a); }
     if (strcmp("len",  func) == 0) { return builtin_len(a); }
     if (strstr("+-*/%", func)) { return builtin_op(a, func); }
     lval_del(a);
@@ -441,7 +457,7 @@ int main(int argc, char** argv) {
       symbol   : \"list\" | \"head\" | \"tail\" |          \
                 \"join\" | \"eval\" | '+' | '-' | '*' |    \
                 '/' | '%' | '^' | \"min\" | \"max\"  |     \
-                \"len\" ;                                  \
+                \"len\" | \"init\";                        \
       sexpr    :  '(' <expr>* ')' ;                        \
       qexpr    :  '{' <expr>* '}' ;                        \
       expr     : <number> | <symbol> | <sexpr> | <qexpr> ; \
