@@ -368,6 +368,11 @@ lval* builtin_join(lval* a) {
 }
 
 lval* builtin_len(lval* a) {
+    LASSERT(a, a->count == 1,
+        "Function 'len' only takes ONE argument!");
+    LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
+        "You passed 'len' the wrong thing!");    
+
     lval* v = lval_num_long(0);
     v->type = LVAL_LONG;
     v->num_long = a->cell[0]->count;
