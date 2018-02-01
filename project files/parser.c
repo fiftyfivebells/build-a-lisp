@@ -398,6 +398,10 @@ lval* builtin_init(lval* a) {
 }
 
 lval* builtin_cons(lval* a) {
+    LASSERT(a, a->count == 2,
+        "Function 'cons' needs one value and one list!");
+    LASSERT(a, a->cell[0]->type != LVAL_QEXPR,
+        "Function 'cons' takes a simple value as a first argument, not a list!")
 
     lval* b = lval_qexpr();
     lval_add(b, lval_pop(a, 0));
