@@ -293,6 +293,12 @@ lval* builtin_op(lval* a, char* op) {
 #define LASSERT(args, cond, err) \
     if (!(cond)) { lval_del(args); return lval_err(err); }
 
+#define LEMPTY(args, err) \
+    if (args->cell[0]->count == 0) { lval_del(args); return lval_err(err); }
+
+#define LARGS(args, err) \
+    if (a->count != 1) { lval_del(args); return lval_err(err); }
+
 lval* builtin_head(lval* a) {
     // error conditions
     LASSERT(a, a->count == 1,
