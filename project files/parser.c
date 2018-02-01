@@ -301,12 +301,10 @@ lval* builtin_op(lval* a, char* op) {
 
 lval* builtin_head(lval* a) {
     // error conditions
-    LASSERT(a, a->count == 1,
-        "Function 'head' only takes ONE argument!");
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
-        "You passed 'head' the wrong thing!");
-    LASSERT(a, a->cell[0]->count != 0,
-        "You passed 'head' an empty list!");
+        "You passed 'head' the wrong thing!");    
+    LARGS(a, "Function 'head' only takes ONE argument!");
+    LEMPTY(a, "You passed 'head' an empty list!");
 
     lval* v = lval_take(a, 0);
 
@@ -316,12 +314,10 @@ lval* builtin_head(lval* a) {
 
 lval* builtin_tail(lval* a) {
     // error conditions
-    LASSERT(a, a->count == 1,
-        "Function 'tail' only takes ONE argument!");
+    LARGS(a, "Function 'tail' only takes ONE argument!");
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
         "You passed 'tail' the wrong thing!");
-    LASSERT(a, a->cell[0]->count != 0,
-        "You passed 'tail' an empty list!");
+    LEMPTY(a, "You passed 'tail' an empty list!");
 
     lval* v = lval_take(a, 0);
 
@@ -337,8 +333,7 @@ lval* builtin_list(lval* a) {
 }
 
 lval* builtin_eval(lval* a) {
-    LASSERT(a, a->count == 1,
-        "You gave 'eval' too many arguments!");
+    LARGS(a, "You gave 'eval' too many arguments!");
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
         "You gave 'eval' the wrong type!");
     
@@ -388,12 +383,10 @@ lval* builtin_len(lval* a) {
 }
 
 lval* builtin_init(lval* a) {
-    LASSERT(a, a->count == 1,
-        "Function 'init' only takes ONE argument!");
+    LARGS(a, "Function 'init' only takes ONE argument!");
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
         "You passed 'init' the wrong thing!");
-    LASSERT(a, a->cell[0]->count != 0,
-        "You passed 'init' an empty list!");
+    LEMPTY(a, "You passed 'init' an empty list!");
 
     lval* v = lval_take(a, 0);
 
