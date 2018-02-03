@@ -42,10 +42,13 @@ typedef lval*(*lbuiltin)(lenv*, lval*);
 
 typedef struct lval {
     int type;
+
     long num_long;
     double num_double;
     char* err;
     char* sym;
+    lbuiltin fun;
+
     int count;
     struct lval** cell;
 } lval;
