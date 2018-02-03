@@ -35,6 +35,8 @@ struct lenv;
 typedef struct lval lval;
 typedef struct lenv lenv;
 
+typedef lval*(*builtin)(lenv*, lval*);
+
 typedef struct lval {
     int type;
     long num_long;
