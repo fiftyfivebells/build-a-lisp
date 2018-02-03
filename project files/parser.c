@@ -393,6 +393,7 @@ lval* builtin_op(lenv* e, lval* a, char* op) {
                 x = lval_err("You can't use modulo with doubles!");
                 break;
             }
+	    if (strcmp(op, "^") == 0) { x->num_double = power(x->num_double, y->num_double); }
         } else if (y->type == LVAL_LONG) {
             if (strcmp(op, "+") == 0) { x->num_long += y->num_long; }
             if (strcmp(op, "-") == 0) { x->num_long -= y->num_long; }
@@ -406,6 +407,7 @@ lval* builtin_op(lenv* e, lval* a, char* op) {
                 x->num_long = y->num_long;
             }
             if (strcmp(op, "%") == 0) { x->num_long = x->num_long % y->num_long; }
+	    if (strcmp(op, "^") == 0) { x->num_long = power(x->num_long, y->num_long); }
         }
         lval_del(y);
     }
@@ -549,7 +551,7 @@ lval* builtin(lenv* e, lval* a, char* func) {
     if (strcmp("init", func) == 0) { return builtin_init(e, a); }
     if (strcmp("cons", func) == 0) { return builtin_cons(e, a); }
     if (strcmp("len",  func) == 0) { return builtin_len(e, a); }
-    if (strstr("+-*/%", func)) { return builtin_op(e, a, func); }
+    if (strstr("+-*/%^", func)) { return builtin_op(e, a, func); }
     lval_del(a);
     return lval_err("I don't know that function!");
 }
@@ -650,7 +652,7 @@ int main(int argc, char** argv) {
     mpca_lang(MPCA_LANG_DEFAULT,
     "                                                      \
       number   : /-?[0-9]+(\\.[0-9]+)?/ ;                  \
-      symbol   : /[a-zA-Z0-9_+\\-*\\/\\\\=<%>!&]+/ ;       \
+      symbol   : /[a-zA-Z0-9_+\\-*\\/\\\\=<%>^!&]+/ ;       \
       sexpr    :  '(' <expr>* ')' ;                        \
       qexpr    :  '{' <expr>* '}' ;                        \
       expr     : <number> | <symbol> | <sexpr> | <qexpr> ; \
