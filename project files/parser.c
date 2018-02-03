@@ -426,6 +426,19 @@ lval* builtin_op(lenv* e, lval* a, char* op) {
     return x;
 }
 
+char* ltype_name(int t) {
+    switch(t) {
+	case LVAL_FUN: return "Function";
+	case LVAL_ERR: return "Error";
+	case LVAL_SYM: return "Symbol";
+	case LVAL_NUM_DOUBLE:
+	case LVAL_NUM_LONG: "Number";
+	case LVAL_SEXPR: return "S-Expression";
+	case LVAL_QEXPR: return "Q-Expression";
+	default: return "Unknown";
+    }
+}
+
 #define LASSERT(args, cond, fmt, ...) \
     if (!(cond)) { \
 	lval* err= lval_err(fmt,##__VA_ARGS__); \
