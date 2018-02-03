@@ -330,7 +330,7 @@ lval* lval_take(lval* v, int i) {
     return x;
 }
 
-lval* lval_eval_sexpr(lval* v);
+lval* lval_eval_sexpr(lenv* e, lval* v);
 
 lval* lval_eval(lenv* e, lval* v) {
     // check the environment for the lval first, and get it's
@@ -551,11 +551,11 @@ lval* builtin(lval* a, char* func) {
     return lval_err("I don't know that function!");
 }
 
-lval* lval_eval_sexpr(lval* v) {
+lval* lval_eval_sexpr(lenv* e, lval* v) {
 
     // evaluate children
     for (int i = 0; i < v->count; i++) {
-        v->cell[i] = lval_eval(v->cell[i]);
+        v->cell[i] = lval_eval(e, v->cell[i]);
     }
 
     // check for errors
@@ -571,13 +571,13 @@ lval* lval_eval_sexpr(lval* v) {
 
     // make sure first element is a symbol
     lval* f = lval_pop(v, 0);
-    if (f->type != LVAL_SYM) {
+    if (f->type != LVAL_FUN) {
         lval_del(f); lval_del(v);
-        return lval_err("You need to start with a symbol!");
+        return lval_err("You need to start with a function!");
     }
 
     // call built-in operator
-    lval* result = builtin(v, f->sym);
+    lval* result = f->fun(e, v);
     lval_del(f);
     return result;
 }
