@@ -69,6 +69,17 @@ lenv* lenv_new(void) {
     return e;
 }
 
+// delete an environment
+void lenv_del(lenv* e) {
+    for (int i = 0; i < e->count; i++) {
+        free(e->syms[i]);
+        lval_del(e->vals[i]);
+    }
+    free(e->syms);
+    free(e->vals);
+    free(e);
+}
+
 // pointer to a number lval
 lval* lval_num_long(long x) {
     lval* v = malloc(sizeof(lval));
