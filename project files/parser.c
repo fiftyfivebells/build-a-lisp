@@ -77,12 +77,22 @@ lval* lval_num_double(double x) {
 }
 
 // pointer to an error lval
-lval* lval_err(char* m) {
+lval* lval_err(char* fmt, ...) {
     lval* v = malloc(sizeof(lval));
     v->type = LVAL_ERR;
-    v->err = malloc(strlen(m) + 1);
-    strcpy(v->err, m);
-    return v;
+
+    va_list va;
+    va_start(va, fmt);
+
+    v->err = malloc(512);
+
+    vsnprintf(v->err, 511, fmt, va);
+
+    v->err = realloc(v->err, strlen(v->err)+1);
+
+    va_end(va);
+
+    return v; 
 }
 
 // pointer to a symbol lval
