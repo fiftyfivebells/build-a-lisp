@@ -465,7 +465,10 @@ lval* builtin_head(lenv* e, lval* a) {
     // error conditions
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
         "You passed 'head' the wrong thing!");    
-    LARGS(a, "Function 'head' only takes ONE argument!");
+    LASSERT(a, a->count == 1;
+	"You passed 'head' too many arguments! "
+	"Got %i, but it needs %i.",
+	a->count, 1);
     LEMPTY(a, "You passed 'head' an empty list!");
 
     lval* v = lval_take(a, 0);
