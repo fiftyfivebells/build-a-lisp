@@ -345,7 +345,7 @@ lval* lval_eval(lenv* e, lval* v) {
     }
 
     // otherwise, evaluate the s-expression or simply return the value
-    if (v->type == LVAL_SEXPR) { return lval_eval_sexpr(v); }
+    if (v->type == LVAL_SEXPR) { return lval_eval_sexpr(e, v); }
 
     return v;
 }
