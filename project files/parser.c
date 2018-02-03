@@ -423,7 +423,7 @@ lval* builtin_op(lenv* e, lval* a, char* op) {
 #define LARGS(args, err) \
     if (a->count != 1) { lval_del(args); return lval_err(err); }
 
-lval* builtin_head(lval* a) {
+lval* builtin_head(lenv* e, lval* a) {
     // error conditions
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
         "You passed 'head' the wrong thing!");    
@@ -436,7 +436,7 @@ lval* builtin_head(lval* a) {
     return v;
 }
 
-lval* builtin_tail(lval* a) {
+lval* builtin_tail(lenv* e, lval* a) {
     // error conditions
     LARGS(a, "Function 'tail' only takes ONE argument!");
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
@@ -450,20 +450,20 @@ lval* builtin_tail(lval* a) {
     return v;    
 }
 
-lval* builtin_list(lval* a) {
+lval* builtin_list(lenv* e, lval* a) {
     printf("%d\n", a->type);    
     a->type = LVAL_QEXPR;
     return a;
 }
 
-lval* builtin_eval(lval* a) {
+lval* builtin_eval(lenv* e, lval* a) {
     LARGS(a, "You gave 'eval' too many arguments!");
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
         "You gave 'eval' the wrong type!");
     
     lval* x = lval_take(a, 0);
     x->type = LVAL_SEXPR;
-    return lval_eval(x);
+    return lval_eval(e, x);
 }
 
 lval* lval_join(lval* x, lval* y) {
@@ -476,7 +476,7 @@ lval* lval_join(lval* x, lval* y) {
     return x;
 }
 
-lval* builtin_join(lval* a) {
+lval* builtin_join(lenv* e, lval* a) {
     for (int i = 0; i < a->count; i++) {
         LASSERT(a, a->cell[i]->type == LVAL_QEXPR,
             "You gave 'join' the wrong thing!");
@@ -492,7 +492,7 @@ lval* builtin_join(lval* a) {
     return x;
 }
 
-lval* builtin_len(lval* a) {
+lval* builtin_len(lenv* e, lval* a) {
     LASSERT(a, a->count == 1,
         "Function 'len' only takes ONE argument!");
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
@@ -506,7 +506,7 @@ lval* builtin_len(lval* a) {
     return v;
 }
 
-lval* builtin_init(lval* a) {
+lval* builtin_init(lenv* e, lval* a) {
     LARGS(a, "Function 'init' only takes ONE argument!");
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
         "You passed 'init' the wrong thing!");
@@ -520,7 +520,7 @@ lval* builtin_init(lval* a) {
     return v;
 }
 
-lval* builtin_cons(lval* a) {
+lval* builtin_cons(lenv* e, lval* a) {
     LASSERT(a, a->count == 2,
         "Function 'cons' needs one value and one list!");
     LASSERT(a, a->cell[0]->type != LVAL_QEXPR,
