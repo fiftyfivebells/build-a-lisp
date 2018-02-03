@@ -508,7 +508,6 @@ lval* builtin_tail(lenv* e, lval* a) {
 }
 
 lval* builtin_list(lenv* e, lval* a) {
-    printf("%d\n", a->type);    
     a->type = LVAL_QEXPR;
     return a;
 }
