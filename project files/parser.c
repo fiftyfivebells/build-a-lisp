@@ -187,7 +187,6 @@ lval* lval_read(mpc_ast_t* t) {
     return x;
 }
 
-
 void lval_print(lval* v);
 
 void lval_expr_print(lval* v, char open, char close) {
@@ -217,6 +216,39 @@ void lval_print(lval* v) {
 
 // prints an lval, but with a newline after
 void lval_println(lval* v) { lval_print(v); putchar('\n'); }
+
+// copies an lval
+lval* lval_copy(lval* v) {
+    lval* x = malloc(sizeof(lval));
+    x->type = v->type;
+
+    switch(v->type) {
+        // numbers and functions get copied directly
+        case LVAL_DOUBLE: x->num_double = v->num_double; break;
+        case LVAL_LONG:   x->num_long = v->num_long; break;
+        case LVAL_FUN:    x->fun = v->fun; break;
+
+        // copy strings with malloc
+        case LVAL_ERR:
+            x->err = malloc(strlen(v->err) + 1);
+            strcpy(x->err, v->err); break;
+        
+        case LVAL_SYM:
+            x->sym = malloc(strlen(v->sym) + 1);
+            strcpy(x->sym, v->sym); break;
+        
+        case LVAL_QEXPR:
+        case LVAL_SEXPR:
+            x->count = v->count;
+            x->cell = malloc(sizeof(lval) * x->count);
+            for (int i = 0; i < x->count; i++) {
+                x->cell[i] = lval_copy(v->cell[i]);
+            }
+            break;
+    }
+
+    return x;
+}
 
 // takes first element from s-expression and shifts the rest into its place
 lval* lval_pop(lval* v, int i) {
