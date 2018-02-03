@@ -484,7 +484,7 @@ lval* builtin_head(lenv* e, lval* a) {
         "You passed 'head' too many arguments! "
         "Got %i, but it needs %i.",
         a->count, 1);
-    LASSERT(a, a->count == 0, 
+    LASSERT(a, a->count != 0, 
         "You passed 'head' an empty list!");
 
     lval* v = lval_take(a, 0);
