@@ -332,10 +332,18 @@ lval* lval_take(lval* v, int i) {
 
 lval* lval_eval_sexpr(lval* v);
 
-lval* lval_eval(lval* v) {
+lval* lval_eval(lenv* e, lval* v) {
+    // check the environment for the lval first, and get it's
+    // value back if it's in there
+    if (v->type == LVAL_SYM) {
+        lval* x = lenv_get(e, v);
+        lval_del(v);
+        return x;
+    }
+
+    // otherwise, evaluate the s-expression or simply return the value
     if (v->type == LVAL_SEXPR) { return lval_eval_sexpr(v); }
 
-    // anything other than an s-expression is returned as is
     return v;
 }
 
