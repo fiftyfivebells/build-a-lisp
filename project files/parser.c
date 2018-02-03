@@ -60,60 +60,6 @@ struct lenv {
     lval** vals;
 };
 
-// create a new environment
-lenv* lenv_new(void) {
-    lenv* e = malloc(sizeof(lenv));
-    e->count = 0;
-    e->syms = NULL;
-    e->vals = NULL;
-    return e;
-}
-
-void lval_del(lval* v);
-
-// delete an environment
-void lenv_del(lenv* e) {
-    for (int i = 0; i < e->count; i++) {
-        free(e->syms[i]);
-        lval_del(e->vals[i]);
-    }
-    free(e->syms);
-    free(e->vals);
-    free(e);
-}
-
-// get a lisp value from an environment
-lval* lenv_get(lenv* e, lval* k) {
-    for (int i = 0; i < e->count; i++) {
-        if (strcmp(e->syms[i], k->sym) == 0) {
-            return lval_copy(e->vals[i]);
-        }
-    }
-    return lval_err("I just couldn't find what you were looking for!");
-}
-
-// takes an env, a variable name, and a value. puts the variable into
-// the env as the value, or overwrites if it exists
-void lenv_put(lenv* e, lval* k, lval* v) {
-    for (int i = 0; i < e->count; i++) {
-
-        // if variable exists, delete and overwrite
-        if (strcmp(e->syms[i], k->sym) == 0) {
-            lval_del(e->vals[i]);
-            e->vals[i] = lval_copy(v);
-        }
-    }
-
-    // otherwise, make space and add it
-    e->count++;
-    e->vals = realloc(e->vals, sizeof(lval*) * e->count);
-    e->syms = realloc(e->syms, sizeof(char*) * e->count);
-
-    e->vals[e->count-1] = lval_copy(v);
-    e->syms[e->count-1] = malloc(strlen(k->sym)+1);
-    strcpy(e->syms[e->count-1], k->sym);
-}
-
 // pointer to a number lval
 lval* lval_num_long(long x) {
     lval* v = malloc(sizeof(lval));
@@ -331,6 +277,61 @@ lval* lval_take(lval* v, int i) {
     lval_del(v);
     return x;
 }
+
+// create a new environment
+lenv* lenv_new(void) {
+    lenv* e = malloc(sizeof(lenv));
+    e->count = 0;
+    e->syms = NULL;
+    e->vals = NULL;
+    return e;
+}
+
+void lval_del(lval* v);
+
+// delete an environment
+void lenv_del(lenv* e) {
+    for (int i = 0; i < e->count; i++) {
+        free(e->syms[i]);
+        lval_del(e->vals[i]);
+    }
+    free(e->syms);
+    free(e->vals);
+    free(e);
+}
+
+// get a lisp value from an environment
+lval* lenv_get(lenv* e, lval* k) {
+    for (int i = 0; i < e->count; i++) {
+        if (strcmp(e->syms[i], k->sym) == 0) {
+            return lval_copy(e->vals[i]);
+        }
+    }
+    return lval_err("I just couldn't find what you were looking for!");
+}
+
+// takes an env, a variable name, and a value. puts the variable into
+// the env as the value, or overwrites if it exists
+void lenv_put(lenv* e, lval* k, lval* v) {
+    for (int i = 0; i < e->count; i++) {
+
+        // if variable exists, delete and overwrite
+        if (strcmp(e->syms[i], k->sym) == 0) {
+            lval_del(e->vals[i]);
+            e->vals[i] = lval_copy(v);
+        }
+    }
+
+    // otherwise, make space and add it
+    e->count++;
+    e->vals = realloc(e->vals, sizeof(lval*) * e->count);
+    e->syms = realloc(e->syms, sizeof(char*) * e->count);
+
+    e->vals[e->count-1] = lval_copy(v);
+    e->syms[e->count-1] = malloc(strlen(k->sym)+1);
+    strcpy(e->syms[e->count-1], k->sym);
+}
+
 
 lval* lval_eval_sexpr(lenv* e, lval* v);
 
