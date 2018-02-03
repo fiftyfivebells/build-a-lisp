@@ -620,6 +620,14 @@ lval* builtin_pow(lenv* e, lval* a) {
     return builtin_op(e, a, "^");
 }
 
+lenv* builtin_print(lenv* e, lval* a) {
+    for (int i = 0; i < e->count; i++) {
+        printf("%d. %s\n", i+1, e->syms[i]);
+    }
+    lval_del(a);
+    return lval_sexpr();
+}
+
 void lenv_add_builtin(lenv* e, char* name, lbuiltin func) {
     lval* k = lval_sym(name);
     lval* v = lval_fun(func);
@@ -648,6 +656,7 @@ void lenv_add_builtins(lenv* e) {
 
     // variable functions
     lenv_add_builtin(e, "def", builtin_def);
+    lenv_add_builtin(e, "print", builtin_print);
 }
 
 lval* lval_eval_sexpr(lenv* e, lval* v) {
