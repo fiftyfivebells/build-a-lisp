@@ -29,6 +29,12 @@ void add_history(char* unused){}
 #include <histedit.h>
 #endif
 
+// some forward declarations
+struct lval;
+struct lenv;
+typedef struct lval lval;
+typedef struct lenv lenv;
+
 typedef struct lval {
     int type;
     long num_long;
