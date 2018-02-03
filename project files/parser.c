@@ -659,6 +659,9 @@ int main(int argc, char** argv) {
     puts("Welcome to the party!");
     puts("Press Ctrl+c to Exit\n");
 
+    lenv* e = lenv_new();
+    lenv_add_builtins(e);
+
     while(1) {
 
         char* input = readline("teddycat> ");
