@@ -38,7 +38,7 @@ typedef struct lenv lenv;
 // lisp values
 enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR, LVAL_SYM, LVAL_SEXPR, LVAL_QEXPR };
 
-typedef lval*(*builtin)(lenv*, lval*);
+typedef lval*(*lbuiltin)(lenv*, lval*);
 
 typedef struct lval {
     int type;
