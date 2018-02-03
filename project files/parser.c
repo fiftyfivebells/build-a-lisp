@@ -347,7 +347,7 @@ lval* lval_eval(lenv* e, lval* v) {
     return v;
 }
 
-lval* builtin_op(lval* a, char* op) {
+lval* builtin_op(lenv* e, lval* a, char* op) {
 
     // check if all arguments are numbers, throw error if not
     for (int i = 0; i < a->count; i++) {
