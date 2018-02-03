@@ -36,7 +36,8 @@ typedef struct lval lval;
 typedef struct lenv lenv;
 
 // lisp values
-enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR, LVAL_SYM, LVAL_SEXPR, LVAL_QEXPR };
+enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR, 
+    LVAL_SYM, LVAL_SEXPR, LVAL_QEXPR, LVAL_FUN };
 
 typedef lval*(*lbuiltin)(lenv*, lval*);
 
@@ -104,6 +105,8 @@ lval* lval_qexpr(void) {
     v->cell = NULL;
     return v;
 }
+
+// pointer to 
 
 // this function deletes pointers to lvals
 void lval_del(lval* v) {
