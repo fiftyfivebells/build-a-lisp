@@ -683,6 +683,9 @@ int main(int argc, char** argv) {
         free(input);
     }
 
+    // delete the environment after use
+    lenv_del(e);
+    
     // undefined and delete the parsers
     mpc_cleanup(6, Number, Symbol, Sexpr, Qexpr, Expr, Teddy);
 
