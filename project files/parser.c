@@ -582,7 +582,7 @@ void lenv_add_builtin(lenv* e, char* name, lbuiltin func) {
     lval* k = lval_sym(name);
     lval* v = lval_fun(func);
     lenv_put(e, k, v);
-    lval_del(k)); lval_del(v);
+    lval_del(k); lval_del(v);
 }
 
 void lenv_add_builtins(lenv* e) {
