@@ -69,6 +69,8 @@ lenv* lenv_new(void) {
     return e;
 }
 
+void lval_del(lval* v);
+
 // delete an environment
 void lenv_del(lenv* e) {
     for (int i = 0; i < e->count; i++) {
