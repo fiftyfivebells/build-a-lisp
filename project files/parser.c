@@ -54,6 +54,12 @@ typedef struct lval {
     struct lval** cell;
 } lval;
 
+struct lenv {
+    int count;
+    char** syms;
+    lval** vals;
+};
+
 // pointer to a number lval
 lval* lval_num_long(long x) {
     lval* v = malloc(sizeof(lval));
