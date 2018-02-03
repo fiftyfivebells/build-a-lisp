@@ -551,6 +551,22 @@ lval* builtin(lval* a, char* func) {
     return lval_err("I don't know that function!");
 }
 
+lval* builtin_add(lenv* e, lval* a) {
+    return builtin_op(e, a, "+");
+}
+
+lval* builtin_sub(lenv* e, lval* a) {
+    return builtin_op(e, a, "-");
+}
+
+lval* builtin_mul(lenv* e, lval* a) {
+    return builtin_op(e, a, "*");
+}
+
+lval* builtin_div(lenv* e, lval* a) {
+    return builtin_op(e, a, "/");
+}
+
 lval* lval_eval_sexpr(lenv* e, lval* v) {
 
     // evaluate children
