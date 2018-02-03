@@ -431,8 +431,8 @@ char* ltype_name(int t) {
 	case LVAL_FUN: return "Function";
 	case LVAL_ERR: return "Error";
 	case LVAL_SYM: return "Symbol";
-	case LVAL_NUM_DOUBLE:
-	case LVAL_NUM_LONG: "Number";
+	case LVAL_DOUBLE:
+	case LVAL_LONG: return "Number";
 	case LVAL_SEXPR: return "S-Expression";
 	case LVAL_QEXPR: return "Q-Expression";
 	default: return "Unknown";
@@ -480,7 +480,7 @@ lval* builtin_head(lenv* e, lval* a) {
         "You gave 'head' the wrong type for the first argument! "
 	"You gave it a %s, but it wanted a %s.",
 	ltype_name(a->cell[0]->type), ltype_name(LVAL_QEXPR));    
-    LASSERT(a, a->count == 1;
+    LASSERT(a, a->count == 1,
 	"You passed 'head' too many arguments! "
 	"Got %i, but it needs %i.",
 	a->count, 1);
