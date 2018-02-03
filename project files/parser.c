@@ -60,6 +60,15 @@ struct lenv {
     lval** vals;
 };
 
+// create a new environment
+lenv* lenv_new(void) {
+    lenv* e = malloc(sizeof(lenv));
+    e->count = 0;
+    e->syms = NULL;
+    e->vals = NULL;
+    return e;
+}
+
 // pointer to a number lval
 lval* lval_num_long(long x) {
     lval* v = malloc(sizeof(lval));
