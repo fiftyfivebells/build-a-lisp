@@ -477,7 +477,9 @@ lval* builtin_def(lenv* e, lval* a) {
 lval* builtin_head(lenv* e, lval* a) {
     // error conditions
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
-        "You passed 'head' the wrong thing!");    
+        "You gave 'head' the wrong type for the first argument! "
+	"You gave it a %s, but it wanted a %s.",
+	ltype_name(a->cell[0]->type), ltype_name(LVAL_QEXPR));    
     LASSERT(a, a->count == 1;
 	"You passed 'head' too many arguments! "
 	"Got %i, but it needs %i.",
