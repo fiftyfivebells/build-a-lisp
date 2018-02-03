@@ -106,7 +106,13 @@ lval* lval_qexpr(void) {
     return v;
 }
 
-// pointer to 
+// pointer to a function lval
+lval* lval_fun(lbuiltin func) {
+    lval* v = malloc(sizeof(lval));
+    v->type = LVAL_FUN;
+    v->fun = func;
+    return v;
+}
 
 // this function deletes pointers to lvals
 void lval_del(lval* v) {
