@@ -85,7 +85,7 @@ void lenv_del(lenv* e) {
 // get a lisp value from an environment
 lval* lenv_get(lenv* e, lval* k) {
     for (int i = 0; i < e->count; i++) {
-        if (strcmp(e->syms[i]. k->sym) == 0) {
+        if (strcmp(e->syms[i], k->sym) == 0) {
             return lval_copy(e->vals[i]);
         }
     }
@@ -687,7 +687,7 @@ int main(int argc, char** argv) {
 
     // delete the environment after use
     lenv_del(e);
-    
+
     // undefined and delete the parsers
     mpc_cleanup(6, Number, Symbol, Sexpr, Qexpr, Expr, Teddy);
 
