@@ -627,6 +627,9 @@ void lenv_add_builtins(lenv* e) {
     lenv_add_builtin(e, "/", builtin_div);
     lenv_add_builtin(e, "%", builtin_mod);
     lenv_add_builtin(e, "^", builtin_pow);
+
+    // variable functions
+    lenv_add_builtin(e, "def", builtin_def);
 }
 
 lval* lval_eval_sexpr(lenv* e, lval* v) {
