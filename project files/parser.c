@@ -317,7 +317,7 @@ lval* lenv_get(lenv* e, lval* k) {
             return lval_copy(e->vals[i]);
         }
     }
-    return lval_err("I just couldn't find what you were looking for!");
+    return lval_err("The symbol '%s' is not bound!", k->sym);
 }
 
 // takes an env, a variable name, and a value. puts the variable into
