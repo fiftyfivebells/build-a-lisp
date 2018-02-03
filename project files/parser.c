@@ -80,6 +80,16 @@ void lenv_del(lenv* e) {
     free(e);
 }
 
+// get a lisp value from an environment
+lval* lenv_get(lenv* e, lval* k) {
+    for (int i = 0; i < e->count; i++) {
+        if (strcmp(e->syms[i]. k->sym) == 0) {
+            return lval_copy(e->vals[i]);
+        }
+    }
+    return lval_err("I just couldn't find what you were looking for!");
+}
+
 // pointer to a number lval
 lval* lval_num_long(long x) {
     lval* v = malloc(sizeof(lval));
