@@ -314,6 +314,14 @@ lenv* lenv_copy(lenv* e) {
     return n;
 }
 
+void lenv_def(lenv* e, lval* k, lval* v) {
+    while (e->par) {
+        e = e->par;
+    }
+
+    lenv_put(e, k, v);
+}
+
 void lval_del(lval* v);
 
 // delete an environment
