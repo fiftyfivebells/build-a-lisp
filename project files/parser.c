@@ -634,7 +634,7 @@ lval* builtin_pow(lenv* e, lval* a) {
     return builtin_op(e, a, "^");
 }
 
-lenv* builtin_print(lenv* e, lval* a) {
+lval* builtin_print(lenv* e, lval* a) {
     for (int i = 0; i < e->count; i++) {
         printf("%d. %s\n", i+1, e->syms[i]);
     }
