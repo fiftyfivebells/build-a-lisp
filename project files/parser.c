@@ -540,6 +540,35 @@ char* ltype_name(int t) {
         "Function '%s' passed {} for argument %i.", func, index);
 
 
+
+lval* builtin_var(lenv* e, lval* a, char* func) {
+    LASSERT_TYPE(func, a, 0, LVAL_QEXPR);
+
+    lval* syms = a->cell[0];
+    for (int i = 0; i < syms->count; i++) {
+        LASSERT(a, (syms->cell[i]->type == LVAL_SYM),
+        "Function '%s' can't define a non-symbol. Got %s, expected %s.", func,
+        ltype_name(syms->cell[i]->type),
+        ltype_name(LVAL_SYM));
+    }
+
+    LASSERT(a, (syms->count == a->count - 1),
+    "You gave %s too many arguments for symbols! Got %i, expected %i!", func, syms->count, a->count-1);
+
+    for (int i = 0; i < syms->count; i++) {
+        if (strcmp(func, "def") == 0) {
+            lenv_def(e, syms->cell[i], a->cell[i+1]);
+        }
+
+        if (strcmp(func, "=") == 0) {
+            lenv_put(e, syms->cell[i], a->cell[i+1]);
+        }
+    }
+
+    lval_del(a);
+    return lval_sexpr();
+}
+
 lval* builtin_def(lenv* e, lval* a) {
     return builtin_var(e, a, "def");
 }
