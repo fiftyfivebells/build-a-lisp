@@ -48,7 +48,11 @@ typedef struct lval {
     double num_double;
     char* err;
     char* sym;
-    lbuiltin fun;
+
+    lbuiltin builtin;
+    lenv* env;
+    lval* formals;
+    lval* body;
 
     int count;
     struct lval** cell;
