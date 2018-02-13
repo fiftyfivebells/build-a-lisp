@@ -144,34 +144,6 @@ lval* lval_fun(lbuiltin func) {
     return v;
 }
 
-// this function deletes pointers to lvals
-void lval_del(lval* v) {
-
-    switch (v->type) {
-        // do nothing in the case of a number or double
-        case LVAL_LONG: break;
-        case LVAL_DOUBLE: break;
-        case LVAL_FUN: break;
-
-        // free the string for err and sym
-        case LVAL_ERR: free(v->err); break;
-        case LVAL_SYM: free(v->sym); break;
-
-        // if sexpr or qexpr, delete all elements inside
-        case LVAL_QEXPR:
-        case LVAL_SEXPR:
-            for (int i = 0; i < v->count; i++) {
-                lval_del(v->cell[i]);
-            }
-            // free memory allocated for pointers
-            free(v->cell);
-        break;
-    }
-
-    // free memory allocated for lval struct
-    free(v);
-}
-
 lval* lval_add(lval* v, lval* x) {
     v->count++;
     v->cell = realloc(v->cell, sizeof(lval*) * v->count);
@@ -351,8 +323,8 @@ lval* lenv_get(lenv* e, lval* k) {
     if (e->par) {
         return lenv_get(e->par, k);
     } else {
-    return lval_err("The symbol '%s' is not bound!", k->sym);
-}
+        return lval_err("The symbol '%s' is not bound!", k->sym);
+    }
 }
 
 // takes an env, a variable name, and a value. puts the variable into
