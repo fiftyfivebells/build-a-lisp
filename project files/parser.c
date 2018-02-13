@@ -642,6 +642,24 @@ lenv* builtin_print(lenv* e, lval* a) {
     return lval_sexpr();
 }
 
+lval* builtin_lambda(lenv* e, lval* a) {
+    LASSERT_NUM("\\", a, 2);
+    LASSERT_TYPE("\\", a, 0, LVAL_QEXPR);
+    LASSERT_TYPE("\\", a, 1, LVAL_QEXPR);
+
+    for (int i = 0; i < a->cell[0]->count; i++) {
+        LASSERT(a, (a->cell[0]->cell[i]->type == LVAL_SYM),
+        "Can't define a non-symbol. You gave a %s, but I expected a %s.",
+        ltype_name(a->cell[0]->cell[i]->type), ltype_name(LVAL_SYM));
+    }
+
+    lval* formals = lval_pop(a, 0);
+    lval* body = lval_pop(a, 0);
+    lval_del(a);
+
+    return lval_lambda(formals, body);
+}
+
 void lenv_add_builtin(lenv* e, char* name, lbuiltin func) {
     lval* k = lval_sym(name);
     lval* v = lval_fun(func);
@@ -671,6 +689,9 @@ void lenv_add_builtins(lenv* e) {
     // variable functions
     lenv_add_builtin(e, "def", builtin_def);
     lenv_add_builtin(e, "print", builtin_print);
+
+    // function functions
+    lenv_add_builtin(e, "\\", builtin_lambda);
 }
 
 lval* lval_eval_sexpr(lenv* e, lval* v) {
