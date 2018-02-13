@@ -59,6 +59,7 @@ typedef struct lval {
 } lval;
 
 struct lenv {
+    lenv* par;
     int count;
     char** syms;
     lval** vals;
