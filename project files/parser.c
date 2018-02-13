@@ -542,8 +542,9 @@ char* ltype_name(int t) {
 
 lval* builtin_def(lenv* e, lval* a) {
     return builtin_var(e, a, "def");
-    }
+}
 
+lval* builtin_put(lenv* e, lval* a) {
     return builtin_var(e, a, "=");
 }
 
@@ -747,6 +748,7 @@ void lenv_add_builtins(lenv* e) {
 
     // variable functions
     lenv_add_builtin(e, "def", builtin_def);
+    lenv_add_builtin(e, "=", builtin_put);
     lenv_add_builtin(e, "print", builtin_print);
 
     // function functions
