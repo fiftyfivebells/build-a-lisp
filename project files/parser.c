@@ -356,6 +356,39 @@ void lenv_put(lenv* e, lval* k, lval* v) {
     strcpy(e->syms[e->count-1], k->sym);
 }
 
+// this function deletes pointers to lvals
+void lval_del(lval* v) {
+
+    switch (v->type) {
+        // do nothing in the case of a number or double
+        case LVAL_LONG: break;
+        case LVAL_DOUBLE: break;
+        case LVAL_FUN: 
+            if (!v->builtin) {
+                lenv_del(v->env);
+                lval_del(v->formals);
+                lval_del(v->body);
+            }
+        break;
+
+        // free the string for err and sym
+        case LVAL_ERR: free(v->err); break;
+        case LVAL_SYM: free(v->sym); break;
+
+        // if sexpr or qexpr, delete all elements inside
+        case LVAL_QEXPR:
+        case LVAL_SEXPR:
+            for (int i = 0; i < v->count; i++) {
+                lval_del(v->cell[i]);
+            }
+            // free memory allocated for pointers
+            free(v->cell);
+        break;
+    }
+
+    // free memory allocated for lval struct
+    free(v);
+}
 
 // user-defined function
 lval* lval_lambda(lval* formals, lval* body) {
