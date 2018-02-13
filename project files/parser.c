@@ -331,7 +331,12 @@ lval* lenv_get(lenv* e, lval* k) {
             return lval_copy(e->vals[i]);
         }
     }
+
+    if (e->par) {
+        return lenv_get(e->par, k);
+    } else {
     return lval_err("The symbol '%s' is not bound!", k->sym);
+}
 }
 
 // takes an env, a variable name, and a value. puts the variable into
