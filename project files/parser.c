@@ -240,7 +240,14 @@ void lval_print(lval* v) {
         case LVAL_ERR:    printf("Error: %s", v->err); break;
         case LVAL_SEXPR:  lval_expr_print(v, '(', ')'); break;
         case LVAL_QEXPR:  lval_expr_print(v, '{', '}'); break;
-        case LVAL_FUN:    printf("<function>"); break;
+        case LVAL_FUN:    
+            if (v->builtin) {
+                printf("<builtin>");
+            } else {
+                printf("(\\ "); lval_print(v->formals);
+                putchar(' '); lval_print(v->body); putchar(')');
+            }
+        break;
     }
 }
 
@@ -256,7 +263,16 @@ lval* lval_copy(lval* v) {
         // numbers and functions get copied directly
         case LVAL_DOUBLE: x->num_double = v->num_double; break;
         case LVAL_LONG:   x->num_long = v->num_long; break;
-        case LVAL_FUN:    x->fun = v->fun; break;
+        case LVAL_FUN:    
+            if (v->builtin) {
+                x->builtin = v->builtin;
+            } else {
+                x->builtin = NULL;
+                x->env = lenv_copy(v->env);
+                x->formals = lval_copy(v->formals);
+                x->body = lval_copy(v->body);
+            }
+        break;
 
         // copy strings with malloc
         case LVAL_ERR:
