@@ -357,6 +357,20 @@ void lenv_put(lenv* e, lval* k, lval* v) {
 }
 
 
+// user-defined function
+lval* lval_lambda(lval* formals, lval* body) {
+    lval* v = malloc(sizeof(lval));
+    v->type = LVAL_FUN;
+
+    v->builtin = NULL;
+
+    v->env = lenv_new();
+
+    v->formals = formals;
+    v->body = body;
+    return v;
+}
+
 lval* lval_eval_sexpr(lenv* e, lval* v);
 
 lval* lval_eval(lenv* e, lval* v) {
