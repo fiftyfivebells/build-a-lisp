@@ -539,26 +539,12 @@ char* ltype_name(int t) {
     LASSERT(args, args->cell[index]->count != 0, \
         "Function '%s' passed {} for argument %i.", func, index);
 
+
 lval* builtin_def(lenv* e, lval* a) {
-    LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
-	"You gave function 'def' the wrong type!");
-
-    lval* syms = a->cell[0];
-
-    for (int i = 0; i < syms->count; i++) {
-	LASSERT(a, syms->cell[i]->type == LVAL_SYM,
-	    "Function 'def' can't define something if it's not a symbol!");
+    return builtin_var(e, a, "def");
     }
 
-    LASSERT(a, syms->count == a->count-1,
-	"Function 'def' can't define incorrect number of values to symbols!");
-
-    for (int i = 0; i < syms->count; i++) {
-	lenv_put(e, syms->cell[i], a->cell[i+1]);
-    }
-
-    lval_del(a);
-    return lval_sexpr();
+    return builtin_var(e, a, "=");
 }
 
 lval* builtin_head(lenv* e, lval* a) {
