@@ -460,11 +460,21 @@ char* ltype_name(int t) {
 	return err; \
     }
 
-#define LEMPTY(args, err) \
-    if (args->cell[0]->count == 0) { lval_del(args); return lval_err(err); }
+#define LASSERT_TYPE(func, args, index, expect) \
+    LASSERT(args, args->cell[index]->type == expect, \
+        "Function '%s' passed incorrect type for argument %i. " \
+        "Got %s, Expected %s.", \
+        func, index, ltype_name(args->cell[index]->type), ltype_name(expect))
 
-#define LARGS(args, err) \
-    if (a->count != 1) { lval_del(args); return lval_err(err); }
+#define LASSERT_NUM(func, args, num) \
+    LASSERT(args, args->count == num, \
+        "Function '%s' passed incorrect number of arguments. " \
+        "Got %i, Expected %i.", \
+        func, args->count, num)
+
+#define LASSERT_NOT_EMPTY(func, args, index) \
+    LASSERT(args, args->cell[index]->count != 0, \
+        "Function '%s' passed {} for argument %i.", func, index);
 
 lval* builtin_def(lenv* e, lval* a) {
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
