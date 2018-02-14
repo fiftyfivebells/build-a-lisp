@@ -601,7 +601,7 @@ lval* builtin_tail(lenv* e, lval* a) {
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
         "You passed 'tail' the wrong thing!");
     LASSERT(a, a->count != 0, 
-        "You passed 'tail' an empty list!");;
+        "You passed 'tail' an empty list!");
 
     lval* v = lval_take(a, 0);
 
@@ -667,10 +667,14 @@ lval* builtin_len(lenv* e, lval* a) {
 }
 
 lval* builtin_init(lenv* e, lval* a) {
-    LARGS(a, "Function 'init' only takes ONE argument!");
+    LASSERT(a, a->count == 1,
+        "You passed 'init' too many arguments! "
+        "Got %i, but it needs %i.",
+        a->count, 1);
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
         "You passed 'init' the wrong thing!");
-    LEMPTY(a, "You passed 'init' an empty list!");
+    LASSERT(a, a->count != 0, 
+        "You passed 'init' an empty list!");
 
     lval* v = lval_take(a, 0);
 
