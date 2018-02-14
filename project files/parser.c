@@ -516,6 +516,8 @@ char* ltype_name(int t) {
     }
 }
 
+
+
 #define LASSERT(args, cond, fmt, ...) \
     if (!(cond)) { \
 	lval* err= lval_err(fmt,##__VA_ARGS__); \
@@ -747,6 +749,24 @@ lval* builtin_lambda(lenv* e, lval* a) {
     lval_del(a);
 
     return lval_lambda(formals, body);
+}
+
+lval* lval_call(lenv* e, lval* f, lval* a) {
+
+    // if builtin, call the builtin
+    if (f->builtin) { return f->builtin(e, a); }
+
+    // assign each argument to each formal in order
+    for (int i = 0; i < a->count; i++) {
+        lenv_put(f->env, f->formals->cell[i], a->cell[i]);
+    }
+
+    lval_del(a);
+
+    // set parent environment
+    f->env->par = e;
+
+    return builtin_eval(f->env, lval_add(lval_sexpr(), lval_copy(f->body)));
 }
 
 void lenv_add_builtin(lenv* e, char* name, lbuiltin func) {
