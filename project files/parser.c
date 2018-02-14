@@ -797,7 +797,7 @@ lval* lval_call(lenv* e, lval* f, lval* a) {
     // if & remains in list, bind to empty list
     if (f->formals->count > 0 &&
         strcmp(f->formals->cell[0]->sym, "&") == 0) {
-            if (f->formals0>count != 2) {
+            if (f->formals->count != 2) {
                 return lval_err("Function format invalid. "
                 "Symbol '&' not followed by single symbol.");
             }
