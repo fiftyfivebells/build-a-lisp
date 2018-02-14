@@ -784,7 +784,6 @@ lval* lval_call(lenv* e, lval* f, lval* a) {
 
         return builtin_eval(
             f->env, lval_add(lval_sexpr(), lval_copy(f->body)));
-        )
     } else {
         // otherwise, return partially evaluated function
         return lval_copy(f);
