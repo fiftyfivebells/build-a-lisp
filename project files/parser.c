@@ -847,12 +847,17 @@ lval* lval_eval_sexpr(lenv* e, lval* v) {
     // make sure first element is a symbol
     lval* f = lval_pop(v, 0);
     if (f->type != LVAL_FUN) {
+        lval* err = lval_err(
+            "S-Expression started with incorrect type. "
+            "Got %s, wanted a %s.",
+            ltype_name(f->type), ltype_name(LVAL_FUN));
+        
         lval_del(f); lval_del(v);
-        return lval_err("You need to start with a function!");
+        return err;
     }
 
     // call built-in operator
-    lval* result = f->builtin(e, v);
+    lval* result = lval_call(e, f, v);
     lval_del(f);
     return result;
 }
