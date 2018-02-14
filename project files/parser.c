@@ -594,10 +594,14 @@ lval* builtin_head(lenv* e, lval* a) {
 
 lval* builtin_tail(lenv* e, lval* a) {
     // error conditions
-    LARGS(a, "Function 'tail' only takes ONE argument!");
+    LASSERT(a, a->count == 1,
+        "You passed 'tail' too many arguments! "
+        "Got %i, but it needs %i.",
+        a->count, 1);
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
         "You passed 'tail' the wrong thing!");
-    LEMPTY(a, "You passed 'tail' an empty list!");
+    LASSERT(a, a->count != 0, 
+        "You passed 'tail' an empty list!");;
 
     lval* v = lval_take(a, 0);
 
