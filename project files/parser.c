@@ -226,6 +226,9 @@ void lval_print(lval* v) {
 // prints an lval, but with a newline after
 void lval_println(lval* v) { lval_print(v); putchar('\n'); }
 
+// forward declare lenv_copy
+lenv* lenv_copy(lenv* e);
+
 // copies an lval
 lval* lval_copy(lval* v) {
     lval* x = malloc(sizeof(lval));
