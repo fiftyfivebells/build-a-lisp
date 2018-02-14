@@ -226,8 +226,9 @@ void lval_print(lval* v) {
 // prints an lval, but with a newline after
 void lval_println(lval* v) { lval_print(v); putchar('\n'); }
 
-// forward declare lenv_copy
+// forward declare lenv_copy and lval_del
 lenv* lenv_copy(lenv* e);
+void lval_del(lval* v);
 
 // copies an lval
 lval* lval_copy(lval* v) {
@@ -293,15 +294,6 @@ lval* lval_take(lval* v, int i) {
     return x;
 }
 
-// create a new environment
-lenv* lenv_new(void) {
-    lenv* e = malloc(sizeof(lenv));
-    e->count = 0;
-    e->syms = NULL;
-    e->vals = NULL;
-    return e;
-}
-
 // copy an environment
 lenv* lenv_copy(lenv* e) {
     lenv* n = malloc(sizeof(lenv));
@@ -324,8 +316,6 @@ void lenv_def(lenv* e, lval* k, lval* v) {
 
     lenv_put(e, k, v);
 }
-
-void lval_del(lval* v);
 
 // delete an environment
 void lenv_del(lenv* e) {
