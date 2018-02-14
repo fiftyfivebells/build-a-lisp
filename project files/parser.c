@@ -226,9 +226,10 @@ void lval_print(lval* v) {
 // prints an lval, but with a newline after
 void lval_println(lval* v) { lval_print(v); putchar('\n'); }
 
-// forward declare lenv_copy and lval_del
+// forward declare lenv_copy, lenv_put and lval_del
 lenv* lenv_copy(lenv* e);
 void lval_del(lval* v);
+void lenv_put(lenv* e, lval* k, lval* v)
 
 // copies an lval
 lval* lval_copy(lval* v) {
