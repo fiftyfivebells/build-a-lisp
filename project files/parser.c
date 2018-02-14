@@ -771,6 +771,20 @@ lval* lval_call(lenv* e, lval* f, lval* a) {
         }
 
         lval* sym = lval_pop(f->formals, 0);
+
+        if (strcmp(sym->sym, "&") == 0) {
+            if (f->formals->count != 1) {
+                lval_del(a);
+                return lval_err("Format invalid. "
+                "Symbol '&' not followed by a single symbol.");
+            }
+
+            lval* nsym = lval_pop(f->formals, 0);
+            lenv_put(f->env, nsym, builtin_list(e, a));
+            lval_del(sym); lval_del(nsym);
+            break;
+        }
+
         lval* val = lval_pop(a, 0);
 
         lenv_put(f->env, sym, val);
@@ -779,6 +793,23 @@ lval* lval_call(lenv* e, lval* f, lval* a) {
 
     // now argument list is all bound, delete it
     lval_del(a);
+
+    // if & remains in list, bind to empty list
+    if (f->formals->count > 0 &&
+        strcmp(f->formals->cell[0]->sym, "&") == 0) {
+            if (f->formals0>count != 2) {
+                return lval_err("Function format invalid. "
+                "Symbol '&' not followed by single symbol.");
+            }
+
+            lval_del(lval_pop(f->formals, 0));
+
+            lval* sym = lval_pop(f->formals, 0);
+            lval* val = lval_qexpr();
+
+            lenv_put(f->env, sym, val);
+            lval_del(sym); lval_del(val);
+        }
 
     // if all formals bound, evaluate
     if (f->formals->count == 0) {
