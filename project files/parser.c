@@ -756,17 +756,39 @@ lval* lval_call(lenv* e, lval* f, lval* a) {
     // if builtin, call the builtin
     if (f->builtin) { return f->builtin(e, a); }
 
-    // assign each argument to each formal in order
-    for (int i = 0; i < a->count; i++) {
-        lenv_put(f->env, f->formals->cell[i], a->cell[i]);
+    int given = a->count;
+    int total = f->formals->count;
+
+    while(a->count) {
+        // if no more formal arguments to bind
+        if (f->formals->count == 0) {
+            lval_del(a); return lval_err(
+                "You gave the function too many arguments! "
+                "Got %i, wanted %i.", given, total);
+        }
+
+        lval* sym = lval_pop(f->formals, 0);
+        lval* val = lval_pop(a, 0);
+
+        lenv_put(f->env, sym, val);
+        lval_del(sym); lval_del(val);
     }
 
+    // now argument list is all bound, delete it
     lval_del(a);
 
-    // set parent environment
-    f->env->par = e;
+    // if all formals bound, evaluate
+    if (f->formals->count == 0) {
 
-    return builtin_eval(f->env, lval_add(lval_sexpr(), lval_copy(f->body)));
+        f->env->par = e;
+
+        return builtin_eval(
+            f->env, lval_add(lval_sexpr(), lval_copy(f->body)));
+        )
+    } else {
+        // otherwise, return partially evaluated function
+        return lval_copy(f);
+    }
 }
 
 void lenv_add_builtin(lenv* e, char* name, lbuiltin func) {
