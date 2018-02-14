@@ -616,7 +616,8 @@ lval* builtin_list(lenv* e, lval* a) {
 }
 
 lval* builtin_eval(lenv* e, lval* a) {
-    LARGS(a, "You gave 'eval' too many arguments!");
+    LASSERT(a, a->count > 1, 
+    "You gave 'eval' too many arguments!");
     LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
         "You gave 'eval' the wrong type!");
     
