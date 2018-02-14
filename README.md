@@ -15,7 +15,7 @@ cc -std=c99 -Wall parsing.c mpc.c -o parsing
 
 ### Extra Features
 
-The following is a list of features that I've added to what the book suggests:
+The following is a list of features that I've added on top of what the book suggests:
 
 * Modulo operator
 * Decimal numbers
