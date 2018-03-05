@@ -828,6 +828,29 @@ lval* builtin_ne(lenv* e, lval* a) {
     return builtin_cmp(e, a, "!=");
 }
 
+lval* builtin_if(lenv* e, lval* a) {
+    LASSERT_NUM("if", a, 3);
+    LASSERT_TYPE("if", a, 0, LVAL_LONG);
+    LASSERT_TYPE("if", a, 0, LVAL_DOUBLE);
+    LASSERT_TYPE("if", a, 1, LVAL_QEXPR);
+    LASSERT_TYPE("if", a, 2, LVAL_QEXPR);
+
+    lval* x;
+    a->cell[1]->type = LVAL_SEXPR;
+    a->cell[2]->type = LVAL_SEXPR;
+
+    if (a->cell[0]->num) {
+        // if the condition is true, evaluate the first expression
+        x = lval_eval(e, lval_pop(a, 1));
+    } else{
+        // otherwise evaluate the second expression
+        x = lval_eval(e, lval_pop(a, 2));
+    }
+
+    lval_del(a);
+    return x;
+}
+
 lval* builtin_print(lenv* e, lval* a) {
     for (int i = 0; i < e->count; i++) {
         printf("%d. %s\n", i+1, e->syms[i]);
