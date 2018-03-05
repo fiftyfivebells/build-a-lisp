@@ -824,7 +824,7 @@ lval* builtin_cmp(lenv* e, lval* a, char* op) {
     }
 
     lval_del(a);
-    return lval_num(r);
+    return lval_num_long(r);
 }
 
 lval* builtin_eq(lenv* e, lval* a) {
