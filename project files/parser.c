@@ -754,7 +754,7 @@ lval* builtin_ord(lenv* e, lval* a, char* op) {
     }
 
     lval_del(a);
-    return lval_long(r);
+    return lval_num_long(r);
 }
 
 lval* builtin_gt(lenv* e, lval* a) {
