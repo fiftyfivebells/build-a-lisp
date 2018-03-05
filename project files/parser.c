@@ -820,6 +820,14 @@ lval* builtin_cmp(lenv* e, lval* a, char* op) {
     return lval_num(r);
 }
 
+lval* builtin_eq(lenv* e, lval* a) {
+    return builtin_cmp(e, a, "==");
+}
+
+lval* builtin_ne(lenv* e, lval* a) {
+    return builtin_cmp(e, a, "!=");
+}
+
 lval* builtin_print(lenv* e, lval* a) {
     for (int i = 0; i < e->count; i++) {
         printf("%d. %s\n", i+1, e->syms[i]);
