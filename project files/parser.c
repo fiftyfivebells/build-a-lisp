@@ -728,6 +728,98 @@ lval* builtin_pow(lenv* e, lval* a) {
     return builtin_op(e, a, "^");
 }
 
+lval* builtin_gt(lenv* e, lval* a) {
+    return builtin_ord(e, a, ">");
+}
+
+lval* builtin_lt(lenv* e, lval* a) {
+    return builtin_ord(e, a, "<");
+}
+
+lval* builtin_gte(lenv* e, lval* a) {
+    return builtin_ord(e, a, ">=");
+}
+
+lval* builtin_lte(lenv* e, lval* a) {
+    return builtin_ord(e, a, "<=");
+}
+
+lval* builtin_ord(lenv* e, lval* a, char* op) {
+    LASSERT_NUM(op, a, 2);
+    LASSERT_TYPE(op, a, 0, LVAL_NUM);
+    LASSERT_TYPE(op, a, 1, LVAL_NUM);
+
+    int r;
+    if (strcmp(op, ">") == 0) {
+        r = (a->cell[0]->num > a->cell[1]->num);
+    }
+    if (strcmp(op, "<") == 0) {
+        r = (a->cell[0]->num < a->cell[1]->num);
+    }
+    if (strcmp(op, ">=") == 0) {
+        r = (a->cell[0]->num >= a->cell[1]->num);
+    }
+    if (strcmp(op, "<=") == 0) {
+        r = (a->cell[0]->num <= a->cell[1]->num);
+    }
+
+    lval_del(a);
+    return lval_num(r);
+}
+
+int lval_eq(lval* x, lval* y) {
+    // different types are always !=
+    if (x->type != y->type) { return 0; }
+
+    // compare types
+    switch (x->type) {
+        // compare number values
+        case LVAL_LONG: return (x->num_long == y->num_long);
+        case LVAL_DOUBLE: return (x->num_double == y->num_double);
+
+        // compare string values
+        case LVAL_ERR: return (strcmp(x->err, y->err) == 0);
+        case LVAL_SYM: return (strcmp(x->sym, y->sym) == 0);
+
+        // compare builtins, otherwise compare body and formals
+        case LVAL_FUN:
+            if (x->builtin || y->builtin) {
+                return x->builtin == y->builtin;
+            } else {
+                return lval_eq(x->formals, y->formals)
+                    && lval_eq(x->body, y->body);
+            }
+
+        // if it's a list, compare all the elements
+        case LVAL_QEXPR:
+        case LVAL_SEXPR:
+            if (x->count != y->count) { return 0; }
+            for (int i = 0; i < x->count; i++) {
+                // return 0 if any element is not equal
+                if (!lval_eq(x->cell[i], y->cell[i])) { return 0; }
+            }
+            // if it makes it through the loop, the lists must be equal
+            return 1;
+        break;
+    }
+    return 0;
+}
+
+lval* builtin_cmp(lenv* e, lval* a, char* op) {
+    LASSERT_NUM(op, a, 2);
+    int r;
+
+    if (strcmp(op, "==") == 0) {
+        r = lval_eq(a->cell[0], a->cell[1]);
+    }
+    if (strcmp(op, "!=") == 0) {
+        r = !lval_eq(a->cell[0], a->cell[1]);
+    }
+
+    lval_del(a);
+    return lval_num(r);
+}
+
 lval* builtin_print(lenv* e, lval* a) {
     for (int i = 0; i < e->count; i++) {
         printf("%d. %s\n", i+1, e->syms[i]);
