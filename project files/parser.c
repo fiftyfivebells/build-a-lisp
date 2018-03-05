@@ -737,20 +737,24 @@ lval* builtin_ord(lenv* e, lval* a, char* op) {
 
     int r;
     if (strcmp(op, ">") == 0) {
-        r = (a->cell[0]->num > a->cell[1]->num);
+        r = (a->cell[0]->num_long > a->cell[1]->num_long ||
+            a->cell[0]->num_double > a->cell[1]->num_double);
     }
     if (strcmp(op, "<") == 0) {
-        r = (a->cell[0]->num < a->cell[1]->num);
+        r = (a->cell[0]->num_long < a->cell[1]->num_long ||
+            a->cell[0]->num_double < a->cell[1]->num_double);
     }
     if (strcmp(op, ">=") == 0) {
-        r = (a->cell[0]->num >= a->cell[1]->num);
+        r = (a->cell[0]->num_long >= a->cell[1]->num_long ||
+            a->cell[0]->num_double >= a->cell[1]->num_double);
     }
     if (strcmp(op, "<=") == 0) {
-        r = (a->cell[0]->num <= a->cell[1]->num);
+        r = (a->cell[0]->num_long <= a->cell[1]->num_long ||
+            a->cell[0]->num_double <= a->cell[1]->num_long);
     }
 
     lval_del(a);
-    return lval_num(r);
+    return lval_long(r);
 }
 
 lval* builtin_gt(lenv* e, lval* a) {
