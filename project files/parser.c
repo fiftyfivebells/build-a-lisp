@@ -728,22 +728,6 @@ lval* builtin_pow(lenv* e, lval* a) {
     return builtin_op(e, a, "^");
 }
 
-lval* builtin_gt(lenv* e, lval* a) {
-    return builtin_ord(e, a, ">");
-}
-
-lval* builtin_lt(lenv* e, lval* a) {
-    return builtin_ord(e, a, "<");
-}
-
-lval* builtin_gte(lenv* e, lval* a) {
-    return builtin_ord(e, a, ">=");
-}
-
-lval* builtin_lte(lenv* e, lval* a) {
-    return builtin_ord(e, a, "<=");
-}
-
 lval* builtin_ord(lenv* e, lval* a, char* op) {
     LASSERT_NUM(op, a, 2);
     LASSERT_TYPE(op, a, 0, LVAL_NUM);
@@ -766,6 +750,23 @@ lval* builtin_ord(lenv* e, lval* a, char* op) {
     lval_del(a);
     return lval_num(r);
 }
+
+lval* builtin_gt(lenv* e, lval* a) {
+    return builtin_ord(e, a, ">");
+}
+
+lval* builtin_lt(lenv* e, lval* a) {
+    return builtin_ord(e, a, "<");
+}
+
+lval* builtin_gte(lenv* e, lval* a) {
+    return builtin_ord(e, a, ">=");
+}
+
+lval* builtin_lte(lenv* e, lval* a) {
+    return builtin_ord(e, a, "<=");
+}
+
 
 int lval_eq(lval* x, lval* y) {
     // different types are always !=
