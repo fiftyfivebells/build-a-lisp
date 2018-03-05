@@ -978,6 +978,15 @@ void lenv_add_builtins(lenv* e) {
     lenv_add_builtin(e, "=", builtin_put);
     lenv_add_builtin(e, "print", builtin_print);
 
+    // comparison functions
+    lenv_add_builtin(e, "if", builtin_if);
+    lenv_add_builtin(e, "==", builtin_eq);
+    lenv_add_builtin(e, "!=", builtin_ne);
+    lenv_add_builtin(e, ">",  builtin_gt);
+    lenv_add_builtin(e, "<",  builtin_lt);
+    lenv_add_builtin(e, ">=", builtin_gte);
+    lenv_add_builtin(e, "<=", builtin_lte);
+
     // function functions
     lenv_add_builtin(e, "\\", builtin_lambda);
 }
