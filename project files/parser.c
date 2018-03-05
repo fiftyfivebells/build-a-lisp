@@ -846,7 +846,7 @@ lval* builtin_if(lenv* e, lval* a) {
     a->cell[1]->type = LVAL_SEXPR;
     a->cell[2]->type = LVAL_SEXPR;
 
-    if (a->cell[0]->num) {
+    if (a->cell[0]->num_long || a->cell[0]->num_double) {
         // if the condition is true, evaluate the first expression
         x = lval_eval(e, lval_pop(a, 1));
     } else{
