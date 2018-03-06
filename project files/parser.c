@@ -214,6 +214,20 @@ void lval_expr_print(lval* v, char open, char close) {
     putchar(close);
 }
 
+void lval_print_str(lval* v) {
+    // copy the string
+    char* escaped = malloc(strlen(v->str) + 1);
+    strcpy(escaped, v->str);
+
+    // pass through the escaped function
+    escaped = mpcf_escape(escaped);
+
+    // print between quotation marks
+    printf("\"%s\"", escaped);
+
+    free(escaped);
+}
+
 void lval_print(lval* v) {
     switch(v->type) {
         case LVAL_LONG:   printf("%li", v->num_long); break;
@@ -222,6 +236,7 @@ void lval_print(lval* v) {
         case LVAL_ERR:    printf("Error: %s", v->err); break;
         case LVAL_SEXPR:  lval_expr_print(v, '(', ')'); break;
         case LVAL_QEXPR:  lval_expr_print(v, '{', '}'); break;
+        case LVAL_STR:    lval_print_str(v); break;
         case LVAL_FUN:    
             if (v->builtin) {
                 printf("<builtin>");
