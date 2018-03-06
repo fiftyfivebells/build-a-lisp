@@ -730,27 +730,32 @@ lval* builtin_pow(lenv* e, lval* a) {
 
 lval* builtin_ord(lenv* e, lval* a, char* op) {
     LASSERT_NUM(op, a, 2);
-    LASSERT_TYPE(op, a, 0, LVAL_LONG);
-    LASSERT_TYPE(op, a, 1, LVAL_LONG);
+    
+    if (a->cell[0]->num_long) {
+        a->cell[0]->num_double = (double) a->cell[0]->num_long;
+        a->cell[0]->type = LVAL_DOUBLE;
+    }
+
+    if (a->cell[1]->num_long) {
+        a->cell[1]->num_double = (double) a->cell[1]->num_long;
+        a->cell[1]->type = LVAL_DOUBLE;
+    }
+
     LASSERT_TYPE(op, a, 0, LVAL_DOUBLE);
     LASSERT_TYPE(op, a, 1, LVAL_DOUBLE);
 
     int r;
     if (strcmp(op, ">") == 0) {
-        r = (a->cell[0]->num_long > a->cell[1]->num_long ||
-            a->cell[0]->num_double > a->cell[1]->num_double);
+        r = (a->cell[0]->num_double > a->cell[1]->num_double);
     }
     if (strcmp(op, "<") == 0) {
-        r = (a->cell[0]->num_long < a->cell[1]->num_long ||
-            a->cell[0]->num_double < a->cell[1]->num_double);
+        r = (a->cell[0]->num_double < a->cell[1]->num_double);
     }
     if (strcmp(op, ">=") == 0) {
-        r = (a->cell[0]->num_long >= a->cell[1]->num_long ||
-            a->cell[0]->num_double >= a->cell[1]->num_double);
+        r = (a->cell[0]->num_double >= a->cell[1]->num_double);
     }
     if (strcmp(op, "<=") == 0) {
-        r = (a->cell[0]->num_long <= a->cell[1]->num_long ||
-            a->cell[0]->num_double <= a->cell[1]->num_long);
+        r = (a->cell[0]->num_double <= a->cell[1]->num_long);
     }
 
     lval_del(a);
