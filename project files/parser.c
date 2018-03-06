@@ -843,7 +843,6 @@ lval* builtin_ne(lenv* e, lval* a) {
 lval* builtin_if(lenv* e, lval* a) {
     LASSERT_NUM("if", a, 3);
     LASSERT_TYPE("if", a, 0, LVAL_LONG);
-    LASSERT_TYPE("if", a, 0, LVAL_DOUBLE);
     LASSERT_TYPE("if", a, 1, LVAL_QEXPR);
     LASSERT_TYPE("if", a, 2, LVAL_QEXPR);
 
