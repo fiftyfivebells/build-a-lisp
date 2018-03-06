@@ -48,6 +48,7 @@ typedef struct lval {
     double num_double;
     char* err;
     char* sym;
+    char* str;
 
     lbuiltin builtin;
     lenv* env;
