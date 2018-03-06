@@ -261,6 +261,9 @@ lval* lval_copy(lval* v) {
             }
         break;
 
+        case LVAL_STR: x->str = malloc(strlen(v->str) + 1);
+            strcpy(x->str, v->str); break;
+
         // copy strings with malloc
         case LVAL_ERR:
             x->err = malloc(strlen(v->err) + 1);
@@ -391,6 +394,8 @@ void lval_del(lval* v) {
             }
         break;
 
+        case LVAL_STR: free(v->str); break;
+
         // free the string for err and sym
         case LVAL_ERR: free(v->err); break;
         case LVAL_SYM: free(v->sym); break;
@@ -516,6 +521,7 @@ char* ltype_name(int t) {
 	case LVAL_LONG: return "Number";
 	case LVAL_SEXPR: return "S-Expression";
 	case LVAL_QEXPR: return "Q-Expression";
+        case LVAL_STR: return "String";
 	default: return "Unknown";
     }
 }
@@ -802,6 +808,7 @@ int lval_eq(lval* x, lval* y) {
         // compare string values
         case LVAL_ERR: return (strcmp(x->err, y->err) == 0);
         case LVAL_SYM: return (strcmp(x->sym, y->sym) == 0);
+        case LVAL_STR: return (strcmp(x->str, y->str) == 0);
 
         // compare builtins, otherwise compare body and formals
         case LVAL_FUN:
