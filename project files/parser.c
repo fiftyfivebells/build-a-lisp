@@ -75,6 +75,15 @@ lenv* lenv_new(void) {
     return e;
 }
 
+// pointer to a string lval
+lval* lval_str(char* s) {
+    lval* v = malloc(sizeof(lval));
+    v->type = LVAL_STR;
+    v->str = malloc(strlen(s) + 1);
+    strcpy(v->str, s);
+    return v;
+}
+
 // pointer to a number lval
 lval* lval_num_long(long x) {
     lval* v = malloc(sizeof(lval));
