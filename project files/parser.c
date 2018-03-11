@@ -181,6 +181,9 @@ lval* lval_read(mpc_ast_t* t) {
     if (strstr(t->tag, "number")) { return lval_read_num(t); }
     if (strstr(t->tag, "symbol")) { return lval_sym(t->contents); }
 
+    // if it's a string, read it and return it
+    if (strstr(t->tag, "string")) { return lval_read_str(t); }
+
     // if it's the root, a sexpr, or a qexpr create an empty list
     lval* x = NULL;
     if (strcmp(t->tag, ">") == 0) { x = lval_sexpr(); }
