@@ -954,6 +954,47 @@ lval* builtin_lambda(lenv* e, lval* a) {
     return lval_lambda(formals, body);
 }
 
+lval* builtin_load(lenv* e, lval* a) {
+    LASSERT_NUM("load", a, 1);
+    LASSERT_TYPE("load", a, 0, LVAL_STR);
+
+    // parse file given by string name
+    mpc_result_t r;
+    if (mpc_parse_contents(a->cell[0]->str, Teddy, &r)) {
+        
+        // read contents
+        lval* expr = lval_read(r.output);
+        mpc_ast_delete(r.output);
+
+        // evaluate all expressions
+        while (expr->count) {
+            lval* x = lval_eval(e, lval_pop(expr, 0));
+
+            // if evaluation produces error, print it
+            if (x->type == LVAL_ERR) { lval_println(x); }
+            lval_del(x);
+        }
+
+        // delete expressions and all arguments
+        lval_del(expr);
+        lval_del(a);
+
+        return lval_sexpr();
+    
+    } else {
+        // get the parsing error as a string
+        char* err_msg = mpc_err_string(r.error);
+        mpc_err_delete(r.error);
+
+        // create new error message
+        lval* err = lval_err("Could not load library %s", err_msg);
+        free(err_msg);
+        lval_del(a);
+
+        return err;
+    }
+}
+
 lval* lval_call(lenv* e, lval* f, lval* a) {
 
     // if builtin, call the builtin
