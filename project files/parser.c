@@ -1074,6 +1074,7 @@ int main(int argc, char** argv) {
 
     // parsers
     mpc_parser_t* Number = mpc_new("number");
+    mpc_parser_t* String = mpc_new("string");
     mpc_parser_t* Symbol = mpc_new("symbol");
     mpc_parser_t* Sexpr  = mpc_new("sexpr");
     mpc_parser_t* Qexpr  = mpc_new("qexpr");
@@ -1084,13 +1085,14 @@ int main(int argc, char** argv) {
     mpca_lang(MPCA_LANG_DEFAULT,
     "                                                      \
       number   : /-?[0-9]+(\\.[0-9]+)?/ ;                  \
-      symbol   : /[a-zA-Z0-9_+\\-*\\/\\\\=<%>^!&]+/ ;       \
+      string   : /\"(\\\\.|[^\"])*\"/ ;                    \
+      symbol   : /[a-zA-Z0-9_+\\-*\\/\\\\=<%>^!&]+/ ;      \
       sexpr    :  '(' <expr>* ')' ;                        \
       qexpr    :  '{' <expr>* '}' ;                        \
       expr     : <number> | <symbol> | <sexpr> | <qexpr> ; \
       teddy    : /^/ <expr>* /$/ ;                         \
     ",
-    Number, Symbol, Sexpr, Qexpr, Expr, Teddy);
+    Number, String, Symbol, Sexpr, Qexpr, Expr, Teddy);
 
     puts("Teddy Version 0.0.0.0.1");
     puts("Welcome to the party!");
