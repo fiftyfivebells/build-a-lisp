@@ -175,6 +175,26 @@ lval* lval_read_num(mpc_ast_t* t) {
         lval_num_long(x) : lval_err("That's a bad number.");
 }
 
+lval* lval_read_str(mpc_ast_t* t) {
+    // remove final quotation char
+    t->contents[strlen(t->contents) - 1] = '\0';
+
+    // copy the string without the leading quotation mark
+    char* unescaped = malloc(strlen(t->contents + 1) + 1);
+    strcpy(unescaped, t->contents + 1);
+
+    // pass through the unescape function
+    unescaped = mpcf_unescape(unescaped);
+
+    // turn the value into an lval
+    lval* str = lval_str(unescaped);
+
+    // free the string
+    free(unescaped);
+
+    return str;
+}
+
 lval* lval_read(mpc_ast_t* t) {
 
     // if it's a smybol or number, return the conversion of that type
