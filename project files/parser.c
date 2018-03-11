@@ -35,6 +35,15 @@ struct lenv;
 typedef struct lval lval;
 typedef struct lenv lenv;
 
+mpc_parser_t* Number;
+mpc_parser_t* Symbol; 
+mpc_parser_t* String;
+mpc_parser_t* Comment;
+mpc_parser_t* Sexpr;
+mpc_parser_t* Qexpr;
+mpc_parser_t* Expr;
+mpc_parser_t* Teddy;
+
 // lisp values
 enum { LVAL_LONG, LVAL_DOUBLE, LVAL_ERR, LVAL_STR, 
     LVAL_SYM, LVAL_SEXPR, LVAL_QEXPR, LVAL_FUN };
