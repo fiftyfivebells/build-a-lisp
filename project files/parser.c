@@ -1128,6 +1128,11 @@ void lenv_add_builtins(lenv* e) {
     lenv_add_builtin(e, ">=", builtin_gte);
     lenv_add_builtin(e, "<=", builtin_lte);
 
+    // string functions
+    lenv_add_builtin(e, "load", builtin_load);
+    lenv_add_builtin(e, "error", builtin_error);
+    lenv_add_builtin(e, "print", builtin_print);
+
     // function functions
     lenv_add_builtin(e, "\\", builtin_lambda);
 }
@@ -1241,7 +1246,9 @@ int main(int argc, char** argv) {
     lenv_del(e);
 
     // undefined and delete the parsers
-    mpc_cleanup(8, Number, Symbol, String, Comment, Sexpr, Qexpr, Expr, Teddy);
+    mpc_cleanup(8, 
+        Number, Symbol, String, Comment, 
+        Sexpr, Qexpr, Expr, Teddy);
 
     return 0;
 }
