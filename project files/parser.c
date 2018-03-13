@@ -995,6 +995,18 @@ lval* builtin_load(lenv* e, lval* a) {
     }
 }
 
+lval* builtin_print(lenv* e, lval* a) {
+    // print all arguments followed by space
+    for (int i = 0; i < a->count; i++) {
+        lval_print(a->cell[i]); putchar(' ');
+    }
+
+    putchar('\n');
+    lval_del(a);
+
+    return lval_sexpr();
+}
+
 lval* lval_call(lenv* e, lval* f, lval* a) {
 
     // if builtin, call the builtin
