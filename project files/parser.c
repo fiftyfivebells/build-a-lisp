@@ -928,7 +928,7 @@ lval* builtin_if(lenv* e, lval* a) {
     return x;
 }
 
-lval* builtin_print(lenv* e, lval* a) {
+lval* builtin_printall(lenv* e, lval* a) {
     for (int i = 0; i < e->count; i++) {
         printf("%d. %s\n", i+1, e->syms[i]);
     }
@@ -1106,7 +1106,7 @@ void lenv_add_builtins(lenv* e) {
     // variable functions
     lenv_add_builtin(e, "def", builtin_def);
     lenv_add_builtin(e, "=", builtin_put);
-    lenv_add_builtin(e, "print", builtin_print);
+    lenv_add_builtin(e, "printall", builtin_printall);
 
     // comparison functions
     lenv_add_builtin(e, "if", builtin_if);
