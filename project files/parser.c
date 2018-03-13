@@ -1200,6 +1200,20 @@ int main(int argc, char** argv) {
         free(input);
     }
 
+    if (argc >= 2) {
+        for (int i = 0; i < argc; i++) {
+            // arg list with a single argument
+            lval* args = lval_add(lval_sexpr(), lval_str(argv[i]));
+
+            // pass to builtin_load and get result
+            lval* x = builtin_load(e, args);
+
+            // print any errors
+            if (x->type == LVAL_ERR) { lval_println(x); }
+            lval_del(x);
+        }
+    }
+
     // delete the environment after use
     lenv_del(e);
 
