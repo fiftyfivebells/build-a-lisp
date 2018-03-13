@@ -936,6 +936,17 @@ lval* builtin_printall(lenv* e, lval* a) {
     return lval_sexpr();
 }
 
+lval* builtin_error(lenv* e, lval* a) {
+    LASSERT_NUM("error", a, 1);
+    LASSERT_TYPE("error", a, 0, LVAL_STR);
+
+    // make error from first argument
+    lval* err = lval_err(a->cell[0]->str);
+
+    lval_del(a);
+    return err;
+}
+
 lval* builtin_lambda(lenv* e, lval* a) {
     LASSERT_NUM("\\", a, 2);
     LASSERT_TYPE("\\", a, 0, LVAL_QEXPR);
